@@ -102,7 +102,7 @@ footer{text-align:center;font-size:11px;color:var(--ink-faint);margin-top:2.5rem
       <div class="res-desc" id="res-desc"></div>
     </div>
     <div class="res-tips">
-      <div class="res-tips-title">配信者として / 推すなら</div>
+      <div class="res-tips-title" id="res-tips-title">配信者として / 推すなら</div>
       <div id="res-tips-body"></div>
     </div>
     <div class="chart-wrap"><canvas id="radar" role="img" aria-label="診断結果のレーダーチャート"></canvas></div>
@@ -209,9 +209,11 @@ function showResult(){
   document.getElementById('res-badge').textContent=type.name;
   document.getElementById('res-type').textContent=type.label;
   document.getElementById('res-desc').textContent=type.desc;
+  const tipLabels=QUIZ.tipLabels||['配信者として','推すなら'];
+  document.getElementById('res-tips-title').textContent=QUIZ.tipsTitle||tipLabels.join(' / ');
   document.getElementById('res-tips-body').innerHTML=
-    `<div class="res-tip">配信者として：${type.streamer}</div>`+
-    `<div class="res-tip">推すなら：${type.fan}</div>`;
+    `<div class="res-tip">${tipLabels[0]}：${type.streamer}</div>`+
+    `<div class="res-tip">${tipLabels[1]}：${type.fan}</div>`;
   const grid=document.getElementById('traits-grid');
   grid.innerHTML='';
   QUIZ.axes.forEach((ax,i)=>{

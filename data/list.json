@@ -12,6 +12,14 @@
       "description": "18の質問で、あなたのVTuber適性タイプを6軸レーダーチャートで判定。全12タイプ。",
       "questionsCount": 18,
       "minutes": 3
+    },
+    {
+      "id": "listener-type",
+      "emoji": "📣",
+      "title": "あなたのリスナータイプ診断",
+      "description": "18の質問で推し活スタイルを判定。あなたはどんなリスナー？全12タイプ。",
+      "questionsCount": 18,
+      "minutes": 3
     }
   ]
 }
