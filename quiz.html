@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>診断 | VTuber診断ポータル</title>
+<meta name="description" content="VTuber・配信者向けの診断で遊ぼう。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F5F2FF; --card:#FFFFFF; --ink:#2A2740; --ink-soft:#6B6685; --ink-faint:#A19CBF;
+  --violet:#7F77DD; --violet-deep:#3C3489; --violet-pale:#EEEDFE; --line:#E4E0F5;
+  --pink:#F4A0C6; --radius:16px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:'M PLUS Rounded 1c',-apple-system,sans-serif;min-height:100vh}
+.wrap{max-width:640px;margin:0 auto;padding:1.25rem 1rem 3rem}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem}
+.topbar a{color:var(--ink-soft);font-size:13px;text-decoration:none;font-weight:500}
+.topbar a:hover{color:var(--violet-deep)}
+.screen{display:none}.screen.active{display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:1.5rem 1.25rem;box-shadow:0 2px 12px rgba(127,119,221,.07)}
+/* start */
+.start-emoji{font-size:52px;text-align:center;margin-bottom:.5rem}
+.start-title{font-size:24px;font-weight:900;text-align:center;line-height:1.4;margin-bottom:.75rem;color:var(--violet-deep)}
+.start-desc{font-size:14px;color:var(--ink-soft);line-height:1.8;text-align:center;margin-bottom:1.25rem}
+.start-meta{display:flex;justify-content:center;gap:12px;margin-bottom:1.5rem}
+.start-meta span{background:var(--violet-pale);color:var(--violet-deep);font-size:12px;font-weight:700;border-radius:999px;padding:5px 14px}
+/* quiz */
+.prog-bg{height:6px;background:var(--line);border-radius:3px;margin-bottom:1.5rem;overflow:hidden}
+.prog-fill{height:6px;background:linear-gradient(90deg,var(--violet),var(--pink));border-radius:3px;transition:width .3s}
+.q-num{font-size:12px;font-weight:700;color:var(--violet);margin-bottom:.5rem}
+.q-text{font-size:18px;font-weight:700;margin-bottom:1.5rem;line-height:1.6}
+.options{display:flex;flex-direction:column;gap:10px}
+.opt-btn{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:14px 18px;font-size:15px;font-family:inherit;color:var(--ink);cursor:pointer;text-align:left;transition:border-color .15s,background .15s;line-height:1.5}
+.opt-btn:hover{border-color:var(--violet)}
+.opt-btn.selected{border-color:var(--violet);background:var(--violet-pale);color:var(--violet-deep);font-weight:700}
+.nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:1.5rem}
+.nav-btn{background:transparent;border:1.5px solid var(--line);border-radius:10px;padding:10px 22px;font-size:14px;font-family:inherit;font-weight:700;color:var(--ink-soft);cursor:pointer}
+.nav-btn.primary{background:var(--violet);border-color:var(--violet);color:#fff}
+.nav-btn:disabled{opacity:.35;cursor:default}
+/* result */
+.res-header{text-align:center;margin-bottom:1.25rem}
+.res-badge{display:inline-block;background:var(--violet-pale);color:var(--violet-deep);border-radius:999px;padding:6px 18px;font-size:13px;font-weight:700;margin-bottom:.75rem}
+.res-type{font-size:24px;font-weight:900;margin-bottom:.75rem;line-height:1.4;color:var(--violet-deep)}
+.res-desc{font-size:14px;color:var(--ink-soft);line-height:1.9;text-align:left}
+.res-tips{background:var(--bg);border-radius:12px;padding:14px 18px;margin:1.25rem 0}
+.res-tips-title{font-size:12px;font-weight:700;color:var(--violet);margin-bottom:8px}
+.res-tip{font-size:13px;line-height:1.7;color:var(--ink)}
+.res-tip+.res-tip{border-top:1px solid var(--line);margin-top:8px;padding-top:8px}
+.chart-wrap{position:relative;height:280px;margin:0 auto 1.25rem;max-width:420px}
+.traits-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1.5rem}
+.trait-card{background:var(--bg);border-radius:10px;padding:10px 12px}
+.trait-label{font-size:11px;color:var(--ink-soft);font-weight:700}
+.trait-val{font-size:16px;font-weight:900;color:var(--violet-deep);margin:2px 0 6px}
+.trait-bar-bg{height:5px;background:var(--line);border-radius:3px;overflow:hidden}
+.trait-bar-fill{height:5px;background:linear-gradient(90deg,var(--violet),var(--pink));border-radius:3px}
+.btn-stack{display:flex;flex-direction:column;gap:10px}
+.share-btn{display:block;width:100%;background:#0F1419;color:#fff;border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;text-align:center;text-decoration:none}
+.sub-btn{display:block;width:100%;background:var(--card);color:var(--violet-deep);border:1.5px solid var(--violet);border-radius:12px;padding:13px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;text-align:center}
+.ghost-btn{display:block;width:100%;background:transparent;color:var(--ink-soft);border:none;padding:10px;font-size:13px;font-family:inherit;cursor:pointer;text-align:center}
+.toast{display:none;position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:var(--ink);color:#fff;font-size:13px;border-radius:999px;padding:10px 22px;z-index:50}
+.err{text-align:center;color:var(--ink-soft);padding:3rem 1rem;font-size:14px;line-height:1.8}
+footer{text-align:center;font-size:11px;color:var(--ink-faint);margin-top:2.5rem}
+@media (max-width:400px){ .start-title{font-size:21px} .res-type{font-size:21px} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a href="./">← 診断一覧にもどる</a>
+  </div>
+
+  <!-- スタート画面 -->
+  <div class="screen card" id="screen-start">
+    <div class="start-emoji" id="st-emoji"></div>
+    <h1 class="start-title" id="st-title"></h1>
+    <p class="start-desc" id="st-desc"></p>
+    <div class="start-meta"><span id="st-count"></span><span id="st-min"></span></div>
+    <button class="share-btn" style="background:var(--violet)" onclick="startQuiz()">診断をはじめる</button>
+  </div>
+
+  <!-- 質問画面 -->
+  <div class="screen card" id="screen-quiz">
+    <div class="prog-bg"><div class="prog-fill" id="prog" style="width:0%"></div></div>
+    <div class="q-num" id="q-num"></div>
+    <div class="q-text" id="q-text"></div>
+    <div class="options" id="options"></div>
+    <div class="nav-row">
+      <button class="nav-btn" id="btn-prev" onclick="prevQ()">もどる</button>
+      <button class="nav-btn primary" id="btn-next" onclick="nextQ()">次へ</button>
+    </div>
+  </div>
+
+  <!-- 結果画面 -->
+  <div class="screen card" id="screen-result">
+    <div class="res-header">
+      <div class="res-badge" id="res-badge"></div>
+      <div class="res-type" id="res-type"></div>
+      <div class="res-desc" id="res-desc"></div>
+    </div>
+    <div class="res-tips">
+      <div class="res-tips-title">配信者として / 推すなら</div>
+      <div id="res-tips-body"></div>
+    </div>
+    <div class="chart-wrap"><canvas id="radar" role="img" aria-label="診断結果のレーダーチャート"></canvas></div>
+    <div class="traits-grid" id="traits-grid"></div>
+    <div class="btn-stack">
+      <a class="share-btn" id="btn-x" target="_blank" rel="noopener">𝕏 で結果をシェア</a>
+      <button class="sub-btn" onclick="saveImage()">結果を画像で保存</button>
+      <button class="sub-btn" onclick="copyShare()">結果テキストをコピー</button>
+      <button class="ghost-btn" onclick="restart()">もう一度診断する</button>
+    </div>
+  </div>
+
+  <div class="screen err" id="screen-err">診断が見つかりませんでした。<br><a href="./">診断一覧にもどる</a></div>
+
+  <div class="toast" id="toast">クリップボードにコピーしました！</div>
+  <footer id="foot"></footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+let QUIZ=null, answers=[], current=0, chart=null, lastResult=null;
+
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+async function init(){
+  const id=new URLSearchParams(location.search).get('id');
+  if(!id){show('screen-err');return;}
+  try{
+    const res=await fetch(`data/${encodeURIComponent(id)}.json`);
+    if(!res.ok)throw 0;
+    QUIZ=await res.json();
+  }catch(e){show('screen-err');return;}
+  answers=new Array(QUIZ.questions.length).fill(null);
+  document.title=`${QUIZ.title} | VTuber診断ポータル`;
+  document.querySelector('meta[name="description"]').content=QUIZ.description;
+  document.getElementById('st-emoji').textContent=QUIZ.emoji||'✨';
+  document.getElementById('st-title').textContent=QUIZ.title;
+  document.getElementById('st-desc').textContent=QUIZ.description;
+  document.getElementById('st-count').textContent=`全${QUIZ.questions.length}問`;
+  document.getElementById('st-min').textContent=`約${Math.max(1,Math.round(QUIZ.questions.length/6))}分`;
+  document.getElementById('foot').textContent=`© ${new Date().getFullYear()} VTuber診断ポータル`;
+  show('screen-start');
+}
+
+function startQuiz(){current=0;show('screen-quiz');render();}
+
+function render(){
+  const q=QUIZ.questions[current];
+  document.getElementById('q-num').textContent=`質問 ${current+1} / ${QUIZ.questions.length}`;
+  document.getElementById('q-text').textContent=q.text;
+  document.getElementById('prog').style.width=`${(current/QUIZ.questions.length)*100}%`;
+  const opts=document.getElementById('options');
+  opts.innerHTML='';
+  q.opts.forEach((o,i)=>{
+    const btn=document.createElement('button');
+    btn.className='opt-btn'+(answers[current]===i?' selected':'');
+    btn.textContent=o;
+    btn.onclick=()=>{answers[current]=i;render();};
+    opts.appendChild(btn);
+  });
+  document.getElementById('btn-prev').disabled=current===0;
+  document.getElementById('btn-next').disabled=answers[current]===null;
+  document.getElementById('btn-next').textContent=current===QUIZ.questions.length-1?'結果を見る':'次へ';
+}
+
+function nextQ(){
+  if(answers[current]===null)return;
+  if(current===QUIZ.questions.length-1){showResult();return;}
+  current++;render();
+}
+function prevQ(){if(current>0){current--;render();}}
+
+function calcScores(){
+  const n=QUIZ.axes.length;
+  const scores=new Array(n).fill(0),counts=new Array(n).fill(0);
+  const map=QUIZ.scoreMap;
+  const maxPer=Math.max(...map);
+  QUIZ.questions.forEach((q,i)=>{
+    if(answers[i]!==null){scores[q.axis]+=map[answers[i]];counts[q.axis]++;}
+  });
+  return scores.map((s,i)=>counts[i]?Math.round((s/(counts[i]*maxPer))*100):0);
+}
+
+function getTypeId(scores){
+  const sorted=scores.map((s,i)=>({s,i})).sort((a,b)=>b.s-a.s);
+  const L=QUIZ.logic;
+  if(sorted[0].s-sorted[sorted.length-1].s < L.spreadThreshold) return L.spreadType;
+  const first=sorted[0].i, second=sorted[1].i;
+  for(const r of L.rules){
+    if(r.first===first && (r.second===undefined||r.second===second)) return r.type;
+  }
+  return L.default;
+}
+
+function showResult(){
+  const scores=calcScores();
+  const typeId=getTypeId(scores);
+  const type=QUIZ.types[typeId];
+  lastResult={scores,typeId,type};
+  show('screen-result');
+  document.getElementById('res-badge').textContent=type.name;
+  document.getElementById('res-type').textContent=type.label;
+  document.getElementById('res-desc').textContent=type.desc;
+  document.getElementById('res-tips-body').innerHTML=
+    `<div class="res-tip">配信者として：${type.streamer}</div>`+
+    `<div class="res-tip">推すなら：${type.fan}</div>`;
+  const grid=document.getElementById('traits-grid');
+  grid.innerHTML='';
+  QUIZ.axes.forEach((ax,i)=>{
+    grid.innerHTML+=`<div class="trait-card"><div class="trait-label">${ax}</div><div class="trait-val">${scores[i]}点</div><div class="trait-bar-bg"><div class="trait-bar-fill" style="width:${scores[i]}%"></div></div></div>`;
+  });
+  if(chart)chart.destroy();
+  chart=new Chart(document.getElementById('radar'),{
+    type:'radar',
+    data:{labels:QUIZ.axes,datasets:[{data:scores,backgroundColor:'rgba(127,119,221,0.18)',borderColor:'#7F77DD',pointBackgroundColor:'#7F77DD',pointRadius:4,borderWidth:2}]},
+    options:{responsive:true,maintainAspectRatio:false,animation:{duration:600},
+      plugins:{legend:{display:false}},
+      scales:{r:{min:0,max:100,ticks:{display:false,stepSize:25},grid:{color:'rgba(60,52,137,0.10)'},angleLines:{color:'rgba(60,52,137,0.10)'},pointLabels:{font:{size:12,family:"'M PLUS Rounded 1c',sans-serif"},color:'#6B6685'}}}}
+  });
+  // X共有リンク: OGP付き共有URL(/s/診断ID/タイプID)を使う
+  const shareUrl=`${location.origin}/s/${QUIZ.id}/${typeId}`;
+  const tags=(QUIZ.hashtags||[]).map(t=>`#${t}`).join(' ');
+  const text=`【${QUIZ.title}】\n私は「${type.label}」でした！\n\n${tags}`;
+  document.getElementById('btn-x').href=
+    `https://x.com/intent/post?text=${encodeURIComponent(text)}&url=${encodeURIComponent(shareUrl)}`;
+}
+
+function shareText(){
+  const {scores,type}=lastResult;
+  const bars=QUIZ.axes.map((ax,i)=>{
+    const f=Math.round(scores[i]/20);
+    return `${ax}：${'█'.repeat(f)}${'░'.repeat(5-f)} ${scores[i]}点`;
+  }).join('\n');
+  const tags=(QUIZ.hashtags||[]).map(t=>`#${t}`).join(' ');
+  return `【${QUIZ.title}】\n私は「${type.label}」でした！\n\n${bars}\n\n${location.origin}/s/${QUIZ.id}/${lastResult.typeId}\n${tags}`;
+}
+
+function copyShare(){
+  navigator.clipboard.writeText(shareText()).then(()=>{
+    const t=document.getElementById('toast');
+    t.style.display='block';
+    setTimeout(()=>t.style.display='none',2500);
+  });
+}
+
+function saveImage(){
+  const {scores,type}=lastResult;
+  const W=1080,H=1350,c=document.createElement('canvas');
+  c.width=W;c.height=H;
+  const x=c.getContext('2d');
+  const F="'M PLUS Rounded 1c',sans-serif";
+  x.fillStyle='#F5F2FF';x.fillRect(0,0,W,H);
+  x.fillStyle='#FFFFFF';
+  roundRect(x,50,50,W-100,H-100,36);x.fill();
+  x.textAlign='center';
+  x.fillStyle='#7F77DD';x.font=`700 34px ${F}`;
+  x.fillText(QUIZ.title,W/2,150);
+  x.fillStyle='#3C3489';x.font=`900 58px ${F}`;
+  wrapText(x,type.label,W/2,235,W-220,70);
+  // レーダーチャートを転写
+  const rc=document.getElementById('radar');
+  const size=560;
+  x.drawImage(rc,(W-size)/2,330,size,size*(rc.height/rc.width));
+  // 軸スコア
+  x.textAlign='left';
+  let y=980;
+  QUIZ.axes.forEach((ax,i)=>{
+    x.fillStyle='#6B6685';x.font=`700 26px ${F}`;
+    x.fillText(ax,140,y);
+    x.fillStyle='#E4E0F5';roundRect(x,340,y-20,540,16,8);x.fill();
+    const g=x.createLinearGradient(340,0,880,0);
+    g.addColorStop(0,'#7F77DD');g.addColorStop(1,'#F4A0C6');
+    x.fillStyle=g;roundRect(x,340,y-20,540*scores[i]/100,16,8);x.fill();
+    x.fillStyle='#3C3489';x.font=`900 26px ${F}`;
+    x.fillText(`${scores[i]}`,905,y);
+    y+=52;
+  });
+  x.textAlign='center';x.fillStyle='#A19CBF';x.font=`500 24px ${F}`;
+  x.fillText(location.host,W/2,H-90);
+  const a=document.createElement('a');
+  a.download=`${QUIZ.id}-result.png`;
+  a.href=c.toDataURL('image/png');
+  a.click();
+}
+function roundRect(x,px,py,w,h,r){
+  x.beginPath();
+  x.moveTo(px+r,py);x.arcTo(px+w,py,px+w,py+h,r);x.arcTo(px+w,py+h,px,py+h,r);
+  x.arcTo(px,py+h,px,py,r);x.arcTo(px,py,px+w,py,r);x.closePath();
+}
+function wrapText(x,text,cx,y,maxW,lh){
+  let line='',yy=y;
+  for(const ch of text){
+    if(x.measureText(line+ch).width>maxW){x.fillText(line,cx,yy);line=ch;yy+=lh;}
+    else line+=ch;
+  }
+  x.fillText(line,cx,yy);
+}
+
+function restart(){
+  answers=new Array(QUIZ.questions.length).fill(null);current=0;
+  show('screen-quiz');render();
+}
+
+init();
+</script>
+</body>
+</html>
