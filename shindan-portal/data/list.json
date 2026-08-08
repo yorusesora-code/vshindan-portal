@@ -1,0 +1,17 @@
+{
+  "site": {
+    "name": "VTuber診断ポータル",
+    "tagline": "配信者・VTuber・活動者のための診断あそび場",
+    "description": "VTuber・配信者・活動者向けの診断を集めたポータルサイト。診断して、結果をXでシェアして遊ぼう。"
+  },
+  "quizzes": [
+    {
+      "id": "vtuber-type",
+      "emoji": "🎙️",
+      "title": "あなたはどんなVTuber？診断",
+      "description": "18の質問で、あなたのVTuber適性タイプを6軸レーダーチャートで判定。全12タイプ。",
+      "questionsCount": 18,
+      "minutes": 3
+    }
+  ]
+}
