@@ -18,20 +18,49 @@ VTuber・配信者・活動者向けの診断ポータルサイト。
 ## ファイル構成
 
 ```
-├─ index.html            ポータル(診断カード一覧)。data/list.json から動的生成
+├─ index.html            ポータル(トップ)。診断カード=list.json / BOOTH棚=goods.json /
+│                        note棚=/api/note / MOVIE棚=/api/videos をfetchして動的生成
+├─ index-old.html        旧トップのバックアップ(参照用。配信はしていない)
 ├─ quiz.html             診断エンジン(全診断共通)。?id=◯◯ で data/◯◯.json を読み込む
 ├─ data/
-│   ├─ list.json         診断の目次。トップのカードはここから生成される
+│   ├─ list.json         診断の目次。トップの診断カードはここから生成される
+│   ├─ goods.json        BOOTH商品データ。トップのSHOP棚はここから生成される
 │   ├─ vtuber-type.json  診断1本目「あなたはどんなVTuber？診断」(18問・6軸・12タイプ)
 │   └─ listener-type.json 診断2本目「あなたのリスナータイプ診断」(18問・6軸・12タイプ)
+├─ assets/
+│   └─ mascot.png        トップで使うマスコット画像(透過)
 ├─ functions/
-│   └─ s/[[path]].js     Cloudflare Pages Function。/s/{診断ID}/{タイプID} で
-│                        結果ごとのOGPメタ付きHTMLを返す(Xシェアカード用)。
-│                        env.ASSETS で静的アセットのJSONを読む
+│   ├─ s/[[path]].js     Cloudflare Pages Function。/s/{診断ID}/{タイプID} で
+│   │                    結果ごとのOGPメタ付きHTMLを返す(Xシェアカード用)。
+│   │                    env.ASSETS で静的アセットのJSONを読む
+│   └─ api/
+│       ├─ note.js       /api/note?user=◯◯ でnote公式RSS→記事一覧JSONに変換
+│       └─ videos.js     /api/videos?list=◯◯ でYouTube再生リストRSS→動画一覧JSONに変換
 └─ ogp/
     ├─ site.png          サイト共通OGP画像(1200x630)
     └─ {診断ID}.png      診断ごとのOGP画像(1200x630)。Xシェアカードに使われる
 ```
+
+## トップページ(index.html)の構成
+
+トップは以下をすべてfetchで動的生成する(直書きしない):
+- **診断カード** … `data/list.json` の quizzes から生成。末尾に「準備中」カードを1枚表示
+- **SHOP棚(BOOTH)** … `data/goods.json` の items から生成。取得できないと棚ごと非表示
+- **note棚** … `/api/note?user=yoruse_su` から生成。取得失敗時は棚ごと非表示(エラーは出さない)
+- **MOVIE棚(YouTube)** … `/api/videos?list=PLfrX2ce2YDaw` から生成。空なら案内カードのまま
+- マスコットは `assets/mascot.png` を参照
+
+### note / YouTube は「自動反映」
+
+`functions/api/note.js` と `functions/api/videos.js` は、それぞれ note・YouTube の公式RSSを
+サーバー側(Pages Functions)で取得してJSONに変換する橋渡し役(ブラウザから直接RSSはCORSで読めないため)。
+**noteに記事を投稿する / YouTube再生リストに動画を追加すると、約10分以内にHPへ自動で反映される**
+(Functionが10分キャッシュ)。HP側の更新作業は不要。
+
+### BOOTH商品を追加/変更するには
+
+`data/goods.json` の items 配列に**1ブロック追記するだけ**(url / img / name / price)。
+コードは触らない。push すればSHOP棚に反映される。
 
 ## 診断JSONのスキーマ
 
