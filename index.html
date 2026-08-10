@@ -8,84 +8,538 @@
 <meta property="og:title" content="VTuber診断ポータル">
 <meta property="og:description" content="配信者・VTuber・活動者のための診断あそび場。診断して結果をXでシェアしよう。">
 <meta property="og:type" content="website">
-<meta property="og:image" content="/ogp/site.png">
+<meta property="og:image" content="https://vshindan-portal.pages.dev/ogp/site.png">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#F5F2FF; --card:#FFFFFF; --ink:#2A2740; --ink-soft:#6B6685; --ink-faint:#A19CBF;
-  --violet:#7F77DD; --violet-deep:#3C3489; --violet-pale:#EEEDFE; --line:#E4E0F5;
-  --pink:#F4A0C6; --mint:#9FE0C8;
+  --bounce:cubic-bezier(0.19,1.74,0.47,0.62); /* サイトの署名イージング */
+  --bg:#FFF7FA; --card:#FFFFFF; --ink:#3B3B5C; --ink-soft:#8B8BA8; --ink-faint:#BCBCD2;
+  --violet:#F2679F; --violet-deep:#32324E; --violet-pale:#FDE9F2; --line:#F6CFE0;
+  --night:#3B3B5C; --night-deep:#32324E; --star:#F7C948; --pink:#F2679F; --accent:#EE4D93;
+  --blue:#5FB8EE; --blue-pale:#DDF1FC;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--ink);font-family:'M PLUS Rounded 1c',-apple-system,sans-serif;min-height:100vh}
-.wrap{max-width:720px;margin:0 auto;padding:2.5rem 1rem 3rem}
-header{text-align:center;margin-bottom:2rem}
-.site-badge{display:inline-block;background:var(--violet-pale);color:var(--violet-deep);border-radius:999px;padding:6px 18px;font-size:12px;font-weight:700;margin-bottom:.9rem;letter-spacing:.05em}
-h1{font-size:clamp(26px,6vw,36px);font-weight:900;color:var(--violet-deep);line-height:1.35;margin-bottom:.6rem}
-.tagline{font-size:14px;color:var(--ink-soft);line-height:1.8}
-.deco{display:flex;justify-content:center;gap:8px;margin-top:1rem;font-size:20px}
-.grid{display:grid;grid-template-columns:1fr;gap:14px}
-@media(min-width:560px){.grid{grid-template-columns:1fr 1fr}}
-.quiz-card{display:flex;flex-direction:column;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:1.4rem 1.25rem;text-decoration:none;color:inherit;box-shadow:0 2px 12px rgba(127,119,221,.07);transition:transform .15s,box-shadow .15s}
-.quiz-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(127,119,221,.16)}
-.qc-emoji{font-size:38px;margin-bottom:.6rem}
-.qc-title{font-size:17px;font-weight:900;color:var(--violet-deep);line-height:1.5;margin-bottom:.5rem}
-.qc-desc{font-size:13px;color:var(--ink-soft);line-height:1.7;flex:1;margin-bottom:.9rem}
-.qc-meta{display:flex;gap:8px;margin-bottom:.9rem}
-.qc-meta span{background:var(--bg);color:var(--ink-soft);font-size:11px;font-weight:700;border-radius:999px;padding:4px 12px}
-.qc-cta{align-self:flex-start;background:var(--violet);color:#fff;font-size:13px;font-weight:700;border-radius:999px;padding:8px 20px}
-.coming{border-style:dashed;opacity:.75}
-.coming .qc-cta{background:var(--line);color:var(--ink-soft)}
-footer{text-align:center;font-size:11px;color:var(--ink-faint);margin-top:3rem;line-height:2}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:'M PLUS Rounded 1c',-apple-system,sans-serif;min-height:100vh;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer}
+.wrap{max-width:1360px;margin:0 auto;padding:0 1rem}
+@media(min-width:900px){.wrap{padding:0 2rem}}
+
+/* ============ 右上固定ガイド ============ */
+.guide{position:fixed;top:12px;right:12px;z-index:60;display:flex;flex-wrap:wrap;justify-content:flex-end;gap:4px;max-width:calc(100vw - 24px);
+  background:rgba(255,255,255,.94);backdrop-filter:blur(8px);
+  border:2.5px solid var(--line);border-radius:999px;padding:7px 10px;
+  box-shadow:0 8px 22px rgba(242,103,159,.22)}
+.guide a{font-size:14px;font-weight:900;color:var(--night);padding:9px 15px;border-radius:999px;
+  transition:background .2s linear,color .2s linear}
+.guide a:hover,.guide a.active{background:var(--violet-pale);color:var(--accent)}
+@media(max-width:480px){.guide a{padding:7px 9px;font-size:12px}}
+
+/* ============ コンパクトヘッダー(全画面ヒーローにしない) ============ */
+header{
+  position:relative;overflow:hidden;text-align:center;
+  background:#FFFFFF;
+  padding:3.6rem 1rem 4.8rem;
+}
+.blob{position:absolute;border-radius:50%;pointer-events:none}
+.b1{width:340px;height:340px;left:-140px;top:-150px;background:#FBDCE9}
+.b2{width:260px;height:260px;right:-110px;top:-100px;background:#D8EFFC}
+.b3{width:220px;height:220px;left:-90px;bottom:-130px;background:#D8EFFC}
+.b4{width:300px;height:300px;right:-120px;bottom:-170px;background:#FBDCE9}
+.sp-p{background:#F58FBC!important}.sp-b{background:#8FD0F5!important}
+.dotp{position:absolute;border-radius:50%;width:10px;height:10px;pointer-events:none}
+.star-p{position:absolute;width:7px;height:7px;background:var(--star);
+  clip-path:polygon(50% 0,63% 37%,100% 50%,63% 63%,50% 100%,37% 63%,0 50%,37% 37%);
+  animation:twinkle 3s ease-in-out infinite}
+@keyframes twinkle{0%,100%{opacity:.25}50%{opacity:1}}
+.hd-inner{position:relative;z-index:2;transform:scale(.9);opacity:0;
+  transition:transform .8s var(--bounce),opacity .5s ease}
+body.is-loaded .hd-inner{transform:none;opacity:1}
+.lc-mark img,.peel-chara img{width:100%;display:block}
+
+.mm-body{animation:sway 4.4s ease-in-out infinite;transform-origin:50% 80%;transform-box:fill-box}
+.mm-ahoge{animation:tilt 5s ease-in-out infinite;transform-origin:50% 100%;transform-box:fill-box}
+@keyframes sway{0%,100%{transform:translate(0,0)}50%{transform:translate(-1%,1%) rotate(-1.5deg)}}
+@keyframes tilt{0%,100%{transform:rotate(0)}30%{transform:rotate(3deg)}70%{transform:rotate(-3deg)}}
+.hd-badge{display:inline-block;background:var(--blue);color:#fff;border-radius:999px;
+  padding:7px 20px;font-size:12px;font-weight:900;letter-spacing:.1em;margin-bottom:1rem;
+  box-shadow:0 4px 12px rgba(95,184,238,.4)}
+h1{font-size:clamp(26px,4.4vw,44px);font-weight:900;color:var(--night);line-height:1.55}
+h1 .hl{background:linear-gradient(transparent 16%,#FBD3E3 16% 90%,transparent 90%);
+  border-radius:12px;padding:.02em .32em;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.ltr{display:inline-block;opacity:0;transform:translateY(.6em) scale(.5);
+  transition:transform .6s var(--bounce),opacity .3s ease}
+.ltr.on{opacity:1;transform:none}
+.tagline{font-size:clamp(13px,1.4vw,15px);color:var(--ink-soft);line-height:1.9;margin-top:.7rem}
+/* ヘッダー下端の波(コンテンツへ自然につなぐ) */
+.hd-wave{position:absolute;left:0;right:0;bottom:-1px;height:34px;z-index:1;
+  background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 360 34' preserveAspectRatio='none'><path d='M0 34h360V16c-30 12-60 12-90 4s-60-16-90-12-60 16-90 16S30 12 0 16z' fill='%23FFF7FA'/></svg>") center/100% 100% no-repeat}
+
+/* ============ 診断一覧(最上部・メインコンテンツ) ============ */
+.quizzes{margin-top:-2.2rem;position:relative;z-index:3;padding-bottom:2.6rem}
+.quiz-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+.q-card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:1.4rem 1.25rem;
+  box-shadow:0 4px 18px rgba(242,103,159,.1);display:flex;flex-direction:column}
+.q-thumb{width:64px;height:64px;border-radius:16px;background:var(--violet-pale);
+  display:flex;align-items:center;justify-content:center;font-size:32px;margin-bottom:.8rem;
+  transition:transform .6s var(--bounce)}
+.q-card:hover .q-thumb,.q-card.touch-hover .q-thumb{transform:rotate(-16deg) translate(-8%,3%)}
+.q-title{font-size:16px;font-weight:900;color:var(--violet-deep);line-height:1.5;margin-bottom:.45rem}
+.q-desc{font-size:13px;color:var(--ink-soft);line-height:1.7;flex:1;margin-bottom:.9rem}
+.q-meta{display:flex;gap:8px;margin-bottom:.9rem;flex-wrap:wrap}
+.q-meta span{background:var(--bg);color:var(--ink-soft);font-size:11px;font-weight:700;border-radius:999px;padding:4px 12px}
+.q-cta{align-self:flex-start;position:relative;z-index:0;color:var(--night);font-size:13px;font-weight:900;padding:9px 22px}
+.ring{position:relative;z-index:0}
+.ring::before{content:"";position:absolute;inset:0;z-index:-1;background:var(--violet-pale);border-radius:999px;
+  transition:inset .6s var(--bounce),box-shadow .6s var(--bounce)}
+.ring:hover::before,.ring.touch-hover::before{inset:-5px;box-shadow:2px 4px 14px rgba(242,103,159,.45)}
+.q-card.soon{border-style:dashed;opacity:.8}
+
+/* ============ 吊り下げ棚(BOOTH/note): ロープ+クリップ+ゆらゆら流れる ============ */
+.shop-sec{padding-top:.4rem}
+.hang-band{position:relative;overflow:hidden;padding:10px 0 30px;
+  width:100vw;margin-left:calc(50% - 50vw)} /* 棚は画面幅いっぱいに流す */
+.rope{position:absolute;top:14px;left:-20px;right:-20px;height:7px;border-radius:4px;
+  background:linear-gradient(180deg,#F7A8C7,#F2679F);box-shadow:0 2px 5px rgba(59,59,92,.28)}
+.hang-track{display:flex;gap:30px;width:max-content;padding-left:10px;will-change:transform}
+.hang-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:5;width:44px;height:44px;
+  border:none;border-radius:50%;background:var(--card);color:var(--night);font-size:15px;font-weight:900;
+  box-shadow:0 4px 14px rgba(59,59,92,.22)}
+.hang-arrow.prev{left:4px}.hang-arrow.next{right:4px}
+.hang-arrow .ar{display:inline-block}
+.hang-arrow.next .ar{transform:scaleX(-1)}
+.hang-item{position:relative;padding-top:36px}
+.hang-item .clipper{position:absolute;top:5px;left:50%;transform:translateX(-50%);
+  width:18px;height:30px;border-radius:5px;background:#F2679F;
+  box-shadow:inset 0 -4px 0 rgba(0,0,0,.12);z-index:2}
+.hang-card{display:block;width:250px;background:var(--card);border:1px solid var(--line);
+  border-radius:16px;overflow:hidden;box-shadow:0 10px 22px rgba(242,103,159,.18);
+  transform-origin:top center;animation:swing 3.6s ease-in-out infinite}
+.hang-item:nth-child(2n) .hang-card{animation-delay:-1.2s;animation-duration:4.1s}
+.hang-item:nth-child(3n) .hang-card{animation-delay:-2.3s}
+.hang-item:nth-child(5n) .hang-card{animation-duration:3.2s;animation-delay:-.6s}
+@keyframes swing{0%,100%{transform:rotate(-2.4deg)}50%{transform:rotate(2.4deg)}}
+.hang-card:hover{animation-play-state:paused}
+.hang-thumb{width:100%;aspect-ratio:1;object-fit:cover;display:block;background:var(--violet-pale)}
+.hang-thumb.wide{aspect-ratio:1.91/1}
+.hang-ph{width:100%;aspect-ratio:1;display:none;align-items:center;justify-content:center;
+  font-size:44px;background:var(--violet-pale)}
+.hang-body{display:block;padding:12px 14px 14px}
+.hang-name{display:-webkit-box;font-size:13.5px;font-weight:900;color:var(--violet-deep);line-height:1.5;
+  -webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.9em}
+.hang-price{display:block;font-size:14px;font-weight:900;color:var(--night);margin-top:6px}
+.hang-price small{font-size:10.5px;color:var(--violet);font-weight:700}
+.hang-more{display:flex;justify-content:center;margin-top:.7rem}
+.hang-more a{font-size:13px;font-weight:900;color:var(--night);padding:10px 26px}
+/* MOVIE: 空状態(ローカルプレビュー時) */
+.movie-empty{max-width:640px;margin:0 auto;background:var(--card);border:2px dashed var(--line);
+  border-radius:16px;padding:26px 20px;text-align:center;font-size:14px;font-weight:700;
+  color:var(--ink-soft);line-height:2}
+.movie-empty small{font-weight:500;font-size:11.5px;color:var(--ink-faint)}
+#movie .hang-card{width:300px}
+#movie .hang-name{-webkit-line-clamp:2;min-height:2.9em}
+
+.note-sec .hang-card{width:280px}
+.note-sec .hang-name{-webkit-line-clamp:3;min-height:4.4em}
+
+/* ============ マーキー(セクション区切りの1行だけ) ============ */
+.marquee-band{background:var(--night-deep);padding:11px 0;overflow:hidden;margin:0 0 .4rem}
+.marquee-track{display:flex;gap:2.2rem;width:max-content;animation:mq 30s linear infinite}
+@keyframes mq{to{transform:translateX(-33.333%)}}
+.marquee-band:hover .marquee-track{animation-play-state:paused}
+.marquee-track a{color:var(--star);font-weight:700;font-size:13px;white-space:nowrap;display:flex;align-items:center;gap:.55rem}
+.marquee-track a::before{content:"✦";font-size:10px}
+
+/* ============ セクション見出し(もくもくプレート) ============ */
+section{padding:2.6rem 0}
+.sec-head{position:relative;text-align:center;margin-bottom:1.7rem;padding-top:6px}
+.cloud-title{position:relative;display:inline-block;background:#fff;
+  border:3px solid var(--line);border-radius:999px;
+  padding:13px 42px 14px;font-size:clamp(18px,4.6vw,23px);font-weight:900;color:var(--night);
+  box-shadow:0 6px 18px rgba(242,103,159,.16)}
+.cloud-title::before{ /* くるん系の落書き線(右上) */
+  content:"";position:absolute;top:-18px;right:-42px;width:36px;height:36px;
+  background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40' fill='none'><path d='M6 30c8 4 20 2 24-6 3-6-2-12-8-10-5 2-5 9 1 9 7 1 11-6 9-13' stroke='%23F2679F' stroke-width='3' stroke-linecap='round'/></svg>") center/contain no-repeat}
+.cloud-title .fc{color:var(--accent)}
+.cloud-title .en{display:block;font-size:9px;letter-spacing:.4em;color:var(--violet);margin-bottom:2px}
+
+/* News */
+.news-list{display:grid;gap:10px}
+.news-item{display:flex;gap:12px;align-items:baseline;background:var(--card);border:1px solid var(--line);
+  border-radius:14px;padding:14px 16px;box-shadow:0 2px 10px rgba(242,103,159,.08)}
+.news-item .nt{font-size:13.5px;font-weight:500;line-height:1.6;transition:color .18s linear}
+.news-item:hover .nt{color:var(--accent)}
+.news-date{font-size:11.5px;color:var(--violet);font-weight:700;white-space:nowrap}
+.news-cat{font-size:10px;font-weight:700;background:var(--blue-pale);color:var(--night);border-radius:999px;padding:3px 10px;white-space:nowrap}
+
+/* Links(コーナーめくりカード・小さめ) */
+.link-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;max-width:620px;margin:0 auto}
+.link-card{position:relative;aspect-ratio:1;border:3px solid #F6CFE0;border-radius:16px;background:var(--card);
+  display:flex;flex-direction:column;align-items:center;padding:0;text-align:center;
+  color:var(--night);overflow:hidden;
+  transition:border-color .2s linear,transform .6s var(--bounce)}
+.lc-name{display:block;font-size:clamp(20px,2.4vw,26px);font-weight:900;letter-spacing:.04em;margin-top:26%}
+.link-card:hover,.link-card.touch-hover{border-color:var(--accent);transform:translateY(-6px)}
+.link-card .dot{position:absolute;top:9px;width:7px;height:7px;border-radius:50%;background:#F6CFE0}
+.link-card .dot.d1{left:11px}.link-card .dot.d2{right:11px}
+.link-card small{display:block;font-size:12px;font-weight:700;color:var(--ink-faint);margin-top:4px;letter-spacing:.03em}
+.lc-mark{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:36%;opacity:.28}
+.lc-mark img{width:100%}
+.peel{position:absolute;right:-1px;bottom:-1px;width:116px;height:116px;clip-path:polygon(100% 0,100% 100%,0 100%)}
+.peel-face{position:absolute;inset:0;z-index:1;
+  background:linear-gradient(315deg,#FFFFFF 44%,#F6DBE7 47%,#F2CBDD 50%,rgba(255,255,255,0) 52%);
+  filter:drop-shadow(-3px -3px 5px rgba(59,59,92,.16));
+  transform:translate(62px,62px);transition:transform 1s var(--bounce)} /* 常時めくれた折り目 */
+.peel-chara{position:absolute;right:8px;bottom:4px;width:62px;opacity:0;z-index:2;
+  transform:translate(46px,46px);transition:transform 1s var(--bounce),opacity .5s ease}
+.link-card:hover .peel-face,.link-card.touch-hover .peel-face{transform:translate(0,0)}
+.link-card:hover .peel-chara,.link-card.touch-hover .peel-chara{transform:translate(0,0);opacity:1}
+
+/* 固定お問い合わせ+ひょっこり */
+
+footer{background:var(--night-deep);color:var(--ink-faint);padding:2.4rem 1rem 5.4rem;text-align:center;margin-top:2.4rem}
+.f-rights{font-size:11px;line-height:2;color:#C9C9DE}
+
+/* リビール */
+.reveal{opacity:0;transform:translateY(26px)}
+.reveal.is-in{opacity:1;transform:none;transition:opacity .6s ease,transform .7s var(--bounce)}
+.reveal-pop{opacity:0;transform:scale(.55)}
+.reveal-pop.is-in{opacity:1;transform:scale(1);transition:opacity .4s ease,transform .6s var(--bounce)}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+  .reveal,.reveal-pop,.ltr,.hd-inner{opacity:1!important;transform:none!important}
+}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <div class="site-badge">VTuber・配信者・活動者むけ</div>
-    <h1>VTuber診断ポータル</h1>
-    <p class="tagline">サクッと診断して、結果をXでシェアして遊ぼう。<br>診断は続々追加予定！</p>
-    <div class="deco">🎙️ 🎮 🎵 ✨</div>
-  </header>
 
-  <div class="grid" id="grid"></div>
+<!-- ページ内ガイド(右上固定) -->
+<nav class="guide" aria-label="ページ内ガイド">
+  <a href="#quizzes" data-g="quizzes">診断</a>
+  <a href="#shop" data-g="shop">SHOP</a>
+  <a href="#note" data-g="note">note</a>
+  <a href="#movie" data-g="movie">MOVIE</a>
+  <a href="#news" data-g="news">NEWS</a>
+  <a href="#links" data-g="links">LINKS</a>
+</nav>
 
-  <footer>
+<!-- ============ コンパクトヘッダー ============ -->
+<header>
+  <div class="blob b1" aria-hidden="true"></div><div class="blob b2" aria-hidden="true"></div>
+  <div class="blob b3" aria-hidden="true"></div><div class="blob b4" aria-hidden="true"></div>
+  <div class="star-p" style="top:16%;left:12%;width:14px;height:14px"></div>
+  <div class="star-p sp-p" style="top:26%;left:88%;animation-delay:.7s;width:16px;height:16px"></div>
+  <div class="star-p sp-b" style="top:10%;left:70%;animation-delay:1.4s"></div>
+  <div class="star-p sp-p" style="top:60%;left:7%;animation-delay:2s"></div>
+  <div class="star-p" style="top:66%;left:92%;animation-delay:1s;width:12px;height:12px"></div>
+  <div class="dotp" style="top:22%;left:30%;background:#F7C948"></div>
+  <div class="dotp" style="top:14%;left:44%;background:#8FD0F5;width:7px;height:7px"></div>
+  <div class="dotp" style="top:70%;left:78%;background:#F58FBC"></div>
+  <div class="hd-inner">
+    <div class="hd-badge">VTuber・配信者・活動者むけ</div>
+    <h1><span class="hl" id="site-title">VTuber診断ポータル</span></h1>
+    <p class="tagline">サクッと診断して、結果をXでシェアして遊ぼう。診断は続々追加予定！</p>
+  </div>
+  <div class="hd-wave" aria-hidden="true"></div>
+</header>
+
+<!-- ============ 診断一覧(最初に来る) ============ -->
+<section class="quizzes wrap" id="quizzes" style="padding-top:0">
+  <div class="quiz-grid" id="quiz-grid"></div>
+</section>
+
+<!-- ============ BOOTH(吊り下げ棚) ============ -->
+<section class="wrap shop-sec" id="shop">
+  <div class="sec-head">
+    <h2 class="cloud-title"><span class="en">SHOP</span><span class="fc">配</span>信素材ショップ</h2>
+  </div>
+  <div class="hang-band" id="booth-band"><div class="rope" aria-hidden="true"></div>
+    <button class="hang-arrow prev ring" aria-label="前へ"><span class="ar">◀</span></button>
+    <button class="hang-arrow next ring" aria-label="次へ"><span class="ar">◀</span></button>
+    <div class="hang-track" id="booth-track"></div></div>
+  <div class="hang-more"><a class="ring" href="https://v-palette.booth.pm/" target="_blank" rel="noopener">BOOTHでもっと見る →</a></div>
+</section>
+
+<!-- ============ note(吊り下げ棚) ============ -->
+<section class="wrap shop-sec note-sec" id="note">
+  <div class="sec-head">
+    <h2 class="cloud-title"><span class="en">note</span><span class="fc">記</span>事</h2>
+  </div>
+  <div class="hang-band" id="note-band"><div class="rope" aria-hidden="true"></div>
+    <button class="hang-arrow prev ring" aria-label="前へ"><span class="ar">◀</span></button>
+    <button class="hang-arrow next ring" aria-label="次へ"><span class="ar">◀</span></button>
+    <div class="hang-track" id="note-track"></div></div>
+  <div class="hang-more"><a class="ring" href="https://note.com/yoruse_su" target="_blank" rel="noopener">noteでもっと読む →</a></div>
+</section>
+
+<!-- ============ MOVIE(YouTube再生リスト) ============ -->
+<section class="wrap shop-sec" id="movie">
+  <div class="sec-head">
+    <h2 class="cloud-title"><span class="en">MOVIE</span><span class="fc">動</span>画</h2>
+  </div>
+  <div class="hang-band" id="movie-band" style="display:none">
+    <div class="rope" aria-hidden="true"></div>
+    <button class="hang-arrow prev ring" aria-label="前へ"><span class="ar">◀</span></button>
+    <button class="hang-arrow next ring" aria-label="次へ"><span class="ar">◀</span></button>
+    <div class="hang-track" id="movie-track"></div>
+  </div>
+  <div class="movie-empty" id="movie-empty">
+    <p>🎬 公開サイトでは、再生リストの動画サムネイルがここに自動で並びます。<br>
+    <small>(動画を追加すると約10分以内にHPへ自動反映。ローカルプレビューでは表示できません)</small></p>
+  </div>
+  <div class="hang-more"><a class="ring" href="https://www.youtube.com/playlist?list=PLfrX2ce2YDaw" target="_blank" rel="noopener">YouTubeで再生リストを見る →</a></div>
+</section>
+
+<!-- マーキー(区切り帯) -->
+<div class="marquee-band" aria-hidden="false"><div class="marquee-track" id="mq"></div></div>
+
+<!-- ============ お知らせ ============ -->
+<section class="wrap" id="news">
+  <div class="sec-head">
+    <h2 class="cloud-title"><span class="en">NEWS</span><span class="fc">お</span>知らせ</h2>
+  </div>
+  <div class="news-list">
+    <a class="news-item" href="#quizzes"><span class="news-date">2026.08.10</span><span class="news-cat">新診断</span><span class="nt">「あなたのリスナータイプ診断」を公開しました！</span></a>
+    <a class="news-item" href="#quizzes"><span class="news-date">2026.08.10</span><span class="news-cat">お知らせ</span><span class="nt">VTuber診断ポータル、オープンしました🎉</span></a>
+    <a class="news-item" href="#quizzes"><span class="news-date">2026.08.10</span><span class="news-cat">新診断</span><span class="nt">「あなたはどんなVTuber？診断」を公開しました！</span></a>
+  </div>
+</section>
+
+<!-- ============ リンク ============ -->
+<section class="wrap" id="links">
+  <div class="sec-head">
+    <h2 class="cloud-title"><span class="en">LINKS</span><span class="fc">リ</span>ンク</h2>
+  </div>
+  <div class="link-grid" id="link-grid"></div>
+</section>
+
+<footer>
+  <p class="f-rights">
     診断結果はエンタメです。ゆるく楽しんでね。<br>
-    © <span id="yr"></span> VTuber診断ポータル
-  </footer>
-</div>
+    当サイトのコンテンツの無断転載・複製・改変を禁止しています。<br>
+    © <span id="yr"></span> VTuber診断ポータル. All Rights Reserved.
+  </p>
+</footer>
 
 <script>
 document.getElementById('yr').textContent=new Date().getFullYear();
-fetch('data/list.json').then(r=>r.json()).then(data=>{
-  const grid=document.getElementById('grid');
-  data.quizzes.forEach(q=>{
+
+/* ===== データ(data/list.json をfetchして生成) ===== */
+let QUIZZES=[];
+
+/* ===== リビール ===== */
+const io=new IntersectionObserver(es=>es.forEach(e=>{
+  if(e.isIntersecting){e.target.classList.add('is-in');io.unobserve(e.target);}
+}),{rootMargin:'0px 0px -12% 0px'});
+function revealGroup(sel,type='reveal',scope=document){
+  [...scope.querySelectorAll(sel)].forEach((el,i)=>{
+    el.classList.add(type);el.style.transitionDelay=(i*0.07).toFixed(2)+'s';io.observe(el);
+  });
+}
+
+/* ===== 診断カード+カテゴリピル ===== */
+function renderCards(){
+  const grid=document.getElementById('quiz-grid');
+  grid.innerHTML='';
+  QUIZZES.forEach(q=>{
     const a=document.createElement('a');
-    a.className='quiz-card';
-    a.href=`quiz.html?id=${encodeURIComponent(q.id)}`;
-    a.innerHTML=`
-      <div class="qc-emoji">${q.emoji||'✨'}</div>
-      <div class="qc-title">${q.title}</div>
-      <div class="qc-desc">${q.description}</div>
-      <div class="qc-meta"><span>全${q.questionsCount}問</span><span>約${q.minutes}分</span></div>
-      <div class="qc-cta">診断する →</div>`;
+    a.className='q-card';a.href=q.url;
+    a.innerHTML=`<div class="q-thumb">${q.emoji}</div><div class="q-title">${q.title}</div>
+      <div class="q-desc">${q.desc}</div>
+      <div class="q-meta"><span>全${q.n}問</span><span>約${q.min}分</span></div>
+      <span class="q-cta ring">診断する →</span>`;
     grid.appendChild(a);
   });
-  // 次回予告カード
   const c=document.createElement('div');
-  c.className='quiz-card coming';
-  c.innerHTML=`
-    <div class="qc-emoji">🔜</div>
-    <div class="qc-title">新しい診断、準備中…</div>
-    <div class="qc-desc">次の診断を制作中です。Xでのシェアが次回作の励みになります！</div>
-    <div class="qc-meta"><span>coming soon</span></div>
-    <div class="qc-cta">おたのしみに</div>`;
+  c.className='q-card soon';
+  c.innerHTML=`<div class="q-thumb">🔜</div><div class="q-title">新しい診断、準備中…</div>
+    <div class="q-desc">次の診断を制作中です。シェアが次回作の励みになります！</div>
+    <div class="q-meta"><span>coming soon</span></div>`;
   grid.appendChild(c);
+  revealGroup('.q-card','reveal',grid);
+}
+/* 診断データを data/list.json から取得してカード+マーキーを生成 */
+(async function initQuizzes(){
+  try{
+    const r=await fetch('data/list.json');
+    if(r.ok){
+      const d=await r.json();
+      QUIZZES=(d.quizzes||[]).map(q=>({
+        id:q.id,emoji:q.emoji,title:q.title,desc:q.description,
+        n:q.questionsCount,min:q.minutes,url:`quiz.html?id=${q.id}`
+      }));
+    }
+  }catch(e){}
+  renderCards();
+  renderMarquee();
+})();
+
+/* ===== リンクカード(コーナーめくり) ===== */
+const PEEL='<span class="peel" aria-hidden="true"><span class="peel-face"></span><span class="peel-chara" data-mslot="small"></span></span>';
+const LINKS=[
+  {href:"https://x.com/yoruse_sora",name:"X",sub:"@yoruse_sora",ext:true},
+  {href:"https://note.com/yoruse_su",name:"note",sub:"記事・コラム",ext:true},
+  {href:"https://www.youtube.com/@yo-ruse",name:"YouTube",sub:"チャンネル",ext:true},
+  {href:"https://v-palette.booth.pm/",name:"BOOTH",sub:"配信素材ショップ",ext:true},
+];
+function renderLinks(){
+  document.getElementById('link-grid').innerHTML=LINKS.map(l=>
+    `<a class="link-card" href="${l.href}"${l.ext?' target="_blank" rel="noopener"':''}>`+
+    `<span class="dot d1"></span><span class="dot d2"></span>`+
+    `<span class="lc-name">${l.name}</span><small>${l.sub}</small>`+
+    `<span class="lc-mark" data-mslot="small" aria-hidden="true"></span>${PEEL}</a>`).join('');
+  revealGroup('.link-card','reveal');
+}
+renderLinks();
+
+/* ===== マーキー ===== */
+function renderMarquee(){
+  const mq=document.getElementById('mq');
+  const items=QUIZZES.map(q=>`<a href="${q.url}">${q.title}</a>`)
+    .concat(['<a href="#quizzes">新診断 続々追加予定</a>','<a href="#quizzes">結果をXでシェアしよう</a>']);
+  const set=items.join('');
+  mq.innerHTML=set+`<span aria-hidden="true">${set}</span><span aria-hidden="true">${set}</span>`;
+}
+
+/* ===== 入場演出(短く控えめに) ===== */
+function lettersHTML(text,base){
+  return [...text].map((ch,i)=>`<span class="ltr" style="transition-delay:${(base+i*0.05).toFixed(2)}s">${ch}</span>`).join('');
+}
+requestAnimationFrame(()=>requestAnimationFrame(()=>{
+  document.body.classList.add('is-loaded');
+  const t=document.getElementById('site-title');
+  t.innerHTML=lettersHTML(t.textContent,0.3);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    t.querySelectorAll('.ltr').forEach(sp=>sp.classList.add('on'));
+  }));
+}));
+
+/* ===== リビール適用(静的要素) ===== */
+revealGroup('.sec-head');
+
+/* ===== ガイドの現在地ハイライト ===== */
+const gLinks=[...document.querySelectorAll('.guide a')];
+const gSpy=new IntersectionObserver(es=>es.forEach(e=>{
+  if(!e.isIntersecting)return;
+  gLinks.forEach(a=>a.classList.toggle('active',a.dataset.g===e.target.id));
+}),{rootMargin:'-30% 0px -60% 0px'});
+['quizzes','shop','note','movie','news','links'].forEach(id=>{
+  const el=document.getElementById(id);if(el)gSpy.observe(el);
 });
+revealGroup('.news-item');
+
+/* ===== 吊り下げ棚: BOOTH商品(data/goods.json) / note記事(/api/note) ===== */
+function hangHTML(items,wide,ph){
+  const base=items.length<4?[...items,...items,...items]:items; /* 少数でも途切れないよう水増し */
+  const set=base.map(it=>
+    `<div class="hang-item"><span class="clipper" aria-hidden="true"></span>`+
+    `<a class="hang-card" href="${it.url}" target="_blank" rel="noopener">`+
+    `<img class="hang-thumb${wide?' wide':''}" src="${it.img}" alt="" loading="lazy" `+
+    `onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`+
+    `<span class="hang-ph"${wide?' style="aspect-ratio:1.91/1"':''}>${ph}</span>`+
+    `<span class="hang-body"><span class="hang-name">${it.name}</span>`+
+    `<span class="hang-price">${it.price||''}</span></span></a></div>`).join('');
+  return set+set+set; /* 3セット複製でシームレスな無限ループ */
+}
+/* BOOTH: data/goods.json から取得(空/失敗時は棚ごと非表示) */
+(async function loadBooth(){
+  let items=[];
+  try{
+    const r=await fetch('data/goods.json');
+    if(r.ok) items=(await r.json()).items||[];
+  }catch(e){}
+  if(!items.length){ document.getElementById('shop').style.display='none'; return; }
+  document.getElementById('booth-track').innerHTML=hangHTML(items,false,'🛒');
+  setupFlow('booth-band');
+})();
+
+/* note: /api/note?user=yoruse_su から取得(取得失敗時は棚ごと非表示・エラーは出さない) */
+(async function loadNote(){
+  let items=[];
+  try{
+    const r=await fetch('/api/note?user=yoruse_su');
+    if(r.ok) items=(await r.json()).items||[];
+  }catch(e){}
+  if(!items.length){ document.getElementById('note').style.display='none'; return; }
+  document.getElementById('note-track').innerHTML=hangHTML(
+    items.map(it=>({url:it.url,img:it.thumb,name:it.title,price:it.date?`<small>${it.date}</small>`:''})),
+    true,'📝');
+  setupFlow('note-band');
+})();
+
+/* 流れ制御: rAFで自動流し+ホバー停止+矢印で1枚ぶん送り */
+function setupFlow(bandId){
+  const band=document.getElementById(bandId);
+  const track=band.querySelector('.hang-track');
+  const rm=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let setW=0,offset=0,paused=false,target=null,last=performance.now();
+  const SPEED=28; /* px/s */
+  function measure(){setW=track.scrollWidth/3;}
+  measure();addEventListener('resize',measure);
+  const firstItem=track.querySelector('.hang-item');
+  const step=()=> (firstItem?firstItem.getBoundingClientRect().width:280)+30;
+  band.addEventListener('mouseenter',()=>paused=true);
+  band.addEventListener('mouseleave',()=>paused=false);
+  band.querySelector('.hang-arrow.prev').addEventListener('click',()=>{target=(target??offset)-step();});
+  band.querySelector('.hang-arrow.next').addEventListener('click',()=>{target=(target??offset)+step();});
+  function frame(now){
+    const dt=Math.min(.05,(now-last)/1000);last=now;
+    if(target!==null){
+      const d=target-offset;
+      offset+=d*Math.min(1,dt*10);
+      if(Math.abs(d)<0.5){offset=target;target=null;}
+    }else if(!paused&&!rm){
+      offset+=SPEED*dt;
+    }
+    const w=setW||1;
+    const norm=((offset%w)+w)%w;
+    track.style.transform=`translateX(${-norm}px)`;
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+
+/* ===== MOVIE: /api/videos から再生リストのサムネを自動取得して棚に =====
+   本番(Cloudflare Pages)では functions/api/videos.js が動いて自動反映。 */
+const YT_LIST='PLfrX2ce2YDaw';
+(async function loadMovies(){
+  let items=[];
+  try{
+    const r=await fetch(`/api/videos?list=${YT_LIST}`);
+    if(r.ok) items=(await r.json()).items||[];
+  }catch(e){}
+  if(!items.length) return; /* 空状態の案内カードのまま */
+  document.getElementById('movie-empty').style.display='none';
+  const band=document.getElementById('movie-band');
+  band.style.display='';
+  document.getElementById('movie-track').innerHTML=hangHTML(
+    items.map(it=>({url:it.url,img:it.thumb,name:it.title,price:it.date?`<small>${it.date}</small>`:''})),
+    true,'🎬');
+  setupFlow('movie-band');
+})();
+
+/* ===== マスコット(ネコ)を全スロットに適用 =====
+   本番では assets/mascot.png に置き、srcを差し替える */
+const MASCOT_IMG="assets/mascot.png";
+document.querySelectorAll('[data-mslot]').forEach(el=>{
+  el.innerHTML=`<img src="${MASCOT_IMG}" alt="" loading="lazy">`;
+});
+
+/* ===== タッチ端末のホバー再現 ===== */
+if(matchMedia('(hover: none)').matches){
+  document.addEventListener('touchstart',e=>{
+    const t=e.target.closest('.link-card,.q-card,.hang-card,.ring');
+    if(!t)return;
+    t.classList.add('touch-hover');
+    setTimeout(()=>t.classList.remove('touch-hover'),800);
+  },{passive:true});
+}
 </script>
 </body>
 </html>
