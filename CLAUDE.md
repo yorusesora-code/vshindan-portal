@@ -35,8 +35,7 @@ VTuber・配信者・活動者向けの診断ポータルサイト。
 │   │                    env.ASSETS で静的アセットのJSONを読む
 │   └─ api/
 │       ├─ note.js       /api/note?user=◯◯ でnote公式RSS→記事一覧JSONに変換
-│       ├─ videos.js     /api/videos?list=◯◯ でYouTube再生リストRSS→動画一覧JSONに変換
-│       └─ booth.js      /api/booth?shop=◯◯ でBOOTHショップページ→商品一覧JSONに変換
+│       └─ videos.js     /api/videos?list=◯◯ でYouTube再生リストRSS→動画一覧JSONに変換
 └─ ogp/
     ├─ site.png          サイト共通OGP画像(1200x630)
     └─ {診断ID}.png      診断ごとのOGP画像(1200x630)。Xシェアカードに使われる
@@ -46,7 +45,7 @@ VTuber・配信者・活動者向けの診断ポータルサイト。
 
 トップは以下をすべてfetchで動的生成する(直書きしない):
 - **診断カード** … `data/list.json` の quizzes から生成。末尾に「準備中」カードを1枚表示
-- **SHOP棚(BOOTH)** … `/api/booth?shop=v-palette` から自動生成。失敗時は `data/goods.json`(手動バックアップ)にフォールバック、それも無ければ棚ごと非表示
+- **SHOP棚(BOOTH)** … `data/goods.json` から生成(GitHub Actionsが数時間おきに自動更新)。取得できないと棚ごと非表示
 - **note棚** … `/api/note?user=yoruse_su` から生成。取得失敗時は棚ごと非表示(エラーは出さない)
 - **MOVIE棚(YouTube)** … `/api/videos?list=PLfrX2ce2YDaw` から生成。空なら案内カードのまま
 - マスコットは `assets/mascot.png` を参照
@@ -58,19 +57,22 @@ VTuber・配信者・活動者向けの診断ポータルサイト。
 **noteに記事を投稿する / YouTube再生リストに動画を追加すると、約10分以内にHPへ自動で反映される**
 (Functionが10分キャッシュ)。HP側の更新作業は不要。
 
-### BOOTH商品は「自動反映」
+### BOOTH商品は「自動反映」(GitHub Actions)
 
-`functions/api/booth.js` が `https://{shop}.booth.pm/` の公開ページを取得し、各商品カードに
-埋め込まれた `data-item` のJSON(id/name/price/画像/在庫状態)を抽出して一覧化する。
-**BOOTH(pixiv)はCloudflareのサーバーIPを403で弾く**ため、公開リーダー `r.jina.ai` を経由して
-生HTMLを取得している(`X-Return-Format: html`)。Jinaが落ちたら index.html が goods.json に自動フォールバック。
-**BOOTHで商品を出品・削除・並べ替えると、約10分以内にHPのSHOP棚へ自動反映される**(10分キャッシュ)。
-価格は `¥ 180~`→`¥180〜` に整形し、商品名に「無料」が含まれれば「無料版あり」バッジを自動付与。
-売切れ・販売終了の商品は自動的に非表示。**HP側の更新作業は不要。**
+**BOOTHで商品を出品・削除・並べ替えると、数時間おきに `data/goods.json` が自動更新され、HPに反映される。**
+仕組み:
+- `.github/workflows/update-booth.yml` が6時間おき(＋手動 Run workflow ＋ スクリプト更新push時)に実行。
+- `scripts/fetch-booth.mjs` が `https://{shop}.booth.pm/` を取得し、各商品カードの `data-item`
+  (埋め込みJSON: id/name/price/画像/在庫状態)を抽出。**BOOTH直アクセスが403で弾かれたら
+  公開リーダー `r.jina.ai` 経由で再取得**する(二段構え)。
+- 価格は `¥ 180~`→`¥180〜` に整形、商品名に「無料」が含まれれば「無料版あり」バッジを付与、
+  売切れ・販売終了は自動除外。差分があれば `data/goods.json` を bot がコミット→自動デプロイ。
 
-- 対象ショップは index.html の `fetch('/api/booth?shop=v-palette')` で指定(現在 v-palette)。
-- `data/goods.json` は**フォールバック兼手動上書き用**として残してある。`/api/booth` が
-  失敗・空を返したときだけ使われる。特定商品を手で並べたい/固定したい場合はここを使う。
+補足:
+- 対象ショップは workflow の `BOOTH_SHOP`(現在 v-palette)とスクリプトで指定。
+- `data/goods.json` は自動生成物。**手で並べ替え/固定したい場合は goods.json を直接編集してもよい**
+  (次回の自動実行で内容が変われば上書きされる点に注意)。
+- BOOTHがCloudflareのサーバーIPを403で弾くため、Pages Function 方式ではなくGitHub Actionsで取得している。
 
 ## 診断JSONのスキーマ
 
