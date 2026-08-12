@@ -20,6 +20,14 @@
       "description": "18の質問で推し活スタイルを判定。あなたはどんなリスナー？全12タイプ。",
       "questionsCount": 18,
       "minutes": 3
+    },
+    {
+      "id": "enjou-type",
+      "emoji": "🔥",
+      "title": "あなたの炎上タイプ診断",
+      "description": "18の質問で、あなたが抱えがちな“火種”を判定。あなたはどう燃える？全12タイプ。",
+      "questionsCount": 18,
+      "minutes": 3
     }
   ]
 }

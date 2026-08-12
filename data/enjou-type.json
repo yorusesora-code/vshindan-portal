@@ -1,0 +1,389 @@
+{
+  "id": "enjou-type",
+  "emoji": "🔥",
+  "title": "あなたの炎上タイプ診断",
+  "shortTitle": "炎上タイプ診断",
+  "description": "18の質問で、あなたが抱えがちな\"火種\"を6軸で判定。全12タイプ。結果はエンタメとしてゆるく受け止めてね。",
+  "hashtags": [
+    "炎上タイプ診断",
+    "VTuber診断"
+  ],
+  "tipsTitle": "燃やさないコツ / もし燃えたら",
+  "tipLabels": [
+    "燃やさないコツ",
+    "もし燃えたら"
+  ],
+  "axes": [
+    "うっかり失言力",
+    "物申し力",
+    "匂わせ力",
+    "沸点の低さ",
+    "延焼参戦力",
+    "誤爆力"
+  ],
+  "scoreMap": [
+    4,
+    3,
+    2,
+    1
+  ],
+  "questions": [
+    {
+      "text": "配信や通話で話が盛り上がってきたとき、あなたの口は？",
+      "axis": 0,
+      "opts": [
+        "脳直で喋ってる。何を言ったか後で覚えてない",
+        "テンションに任せつつ、たまに自分でヒヤッとする",
+        "盛り上がっても頭の中で一回変換してから出す",
+        "常に一呼吸置いてから話す。事故らない"
+      ]
+    },
+    {
+      "text": "「それ表で言っちゃダメなやつ」と周りに言われた経験は？",
+      "axis": 0,
+      "opts": [
+        "何回もある。もはや持ちネタ",
+        "数回ある。反省はしている",
+        "1回あるかないか",
+        "ない。危険察知センサーが強い"
+      ]
+    },
+    {
+      "text": "際どい話題やセンシティブなネタが目の前に流れてきたら？",
+      "axis": 0,
+      "opts": [
+        "面白ければ拾ってひとこと添えたくなる",
+        "触れたい気持ちを抑えきれずチラッと言う",
+        "基本スルーだけど内心は気になっている",
+        "完全スルー。半径5mに近寄らない"
+      ]
+    },
+    {
+      "text": "世間で賛否が真っ二つの話題を見たとき、あなたは？",
+      "axis": 1,
+      "opts": [
+        "自分の意見を長文でポストしたくなる",
+        "引用でひとこと物申したくなる",
+        "いいねだけ押して意見は胸にしまう",
+        "議論そのものに近づかない"
+      ]
+    },
+    {
+      "text": "明らかに間違った情報がバズっていたら？",
+      "axis": 1,
+      "opts": [
+        "訂正リプを送りに行く。正義は我にあり",
+        "空リプでやんわり訂正する",
+        "正しい情報を自分の場で静かに話す",
+        "「世界は広いなあ」と思ってそっ閉じ"
+      ]
+    },
+    {
+      "text": "「あなたって物申す系だよね」と言われたら？",
+      "axis": 1,
+      "opts": [
+        "誇り。むしろそれが看板",
+        "否定はできない",
+        "心外だけど…たまに言ってるかも",
+        "全然違う。争いのない世界に生きている"
+      ]
+    },
+    {
+      "text": "プライベートで嬉しいことがあった日の配信・投稿は？",
+      "axis": 2,
+      "opts": [
+        "聞かれてないのに全部話しちゃう",
+        "「今日いいことあった〜」までは言う",
+        "態度がちょっと柔らかくなる程度",
+        "完全にいつも通り。鉄壁のポーカーフェイス"
+      ]
+    },
+    {
+      "text": "仲のいい配信者・友達との関係、表にどれくらい出てる？",
+      "axis": 2,
+      "opts": [
+        "通話の内容や裏話をつい表で喋ってしまう",
+        "呼び方や距離感でにじみ出てる自覚がある",
+        "表では業務連絡レベルに抑えている",
+        "表と裏を完全に分離。交友関係は国家機密"
+      ]
+    },
+    {
+      "text": "写真や画面をSNSに載せるとき、チェックは？",
+      "axis": 2,
+      "opts": [
+        "ノータイムで投稿。映り込み？考えたことない",
+        "一応見るけど、細部までは見ていない",
+        "映り込み・位置情報を確認してから載せる",
+        "そもそも私物や風景をほぼ上げない"
+      ]
+    },
+    {
+      "text": "配信やSNSにアンチコメントが来た瞬間、あなたは？",
+      "axis": 3,
+      "opts": [
+        "その場で拾って言い返す。売られた喧嘩は買う",
+        "スルーするつもりが顔と声に出てしまう",
+        "心の中で完璧に論破して、表ではスルー",
+        "何も感じない。もはやBGM"
+      ]
+    },
+    {
+      "text": "エゴサ中に自分への悪口を見つけたら？",
+      "axis": 3,
+      "opts": [
+        "スクショか鍵引用で反撃の準備を始める",
+        "友達に共有して一晩中愚痴る",
+        "見なかったことにしてそっ閉じ",
+        "そもそもエゴサをしない。心の平和が第一"
+      ]
+    },
+    {
+      "text": "誤解されたまま話が広がっていたら？",
+      "axis": 3,
+      "opts": [
+        "即座に反論ポスト。訂正はスピードが命",
+        "長文の弁明を書き上げて、勢いで投稿してしまう",
+        "落ち着いてから、事実だけを淡々と訂正する",
+        "時間が解決してくれるのを待つ"
+      ]
+    },
+    {
+      "text": "タイムラインで誰かが燃えていたら？",
+      "axis": 4,
+      "opts": [
+        "現場に駆けつけてリプ欄まで熟読、言及もする",
+        "引用の海を泳いでじっくり観戦する",
+        "概要だけ把握してそっと離れる",
+        "ミュートして自分の平和を守る"
+      ]
+    },
+    {
+      "text": "リスナーや友達に「あの炎上どう思う？」と聞かれたら？",
+      "axis": 4,
+      "opts": [
+        "待ってました、と自分の見解を披露する",
+        "求められたなら軽くだけ触れる",
+        "「その話には触れません」とはっきり言う",
+        "質問ごと華麗に流す"
+      ]
+    },
+    {
+      "text": "燃えているのが知り合いだったら？",
+      "axis": 4,
+      "opts": [
+        "表で擁護や言及をしに行く",
+        "空リプでお気持ちを表明する",
+        "裏で本人に直接連絡だけする",
+        "静観。沈静化を祈って待つ"
+      ]
+    },
+    {
+      "text": "SNSアカウント、いくつ使い分けてる？",
+      "axis": 5,
+      "opts": [
+        "複数あって、今どれで書いてるかたまに分からなくなる",
+        "複数あるけど、投稿前に一応確認している",
+        "2つを厳密にルール運用している",
+        "1つだけ。誤爆のしようがない"
+      ]
+    },
+    {
+      "text": "配信の画面共有、あなたの環境は？",
+      "axis": 5,
+      "opts": [
+        "通知もタブも出しっぱなし。何度か事故った",
+        "ヒヤッとした経験が1〜2回ある",
+        "配信前に通知オフとタブ整理を確認する",
+        "配信専用の環境を完全に分けている"
+      ]
+    },
+    {
+      "text": "送信ボタンを押すとき、あなたは？",
+      "axis": 5,
+      "opts": [
+        "勢いのまま即送信。読み返す文化がない",
+        "押した後に読み返して青ざめるタイプ",
+        "送信前に一度読み返す",
+        "宛先・内容・アカウントを指差し確認する"
+      ]
+    }
+  ],
+  "logic": {
+    "spreadThreshold": 18,
+    "spreadType": "bouka",
+    "rules": [
+      {
+        "first": 0,
+        "second": 1,
+        "type": "dokuzetsu"
+      },
+      {
+        "first": 0,
+        "second": 3,
+        "type": "gyakugire"
+      },
+      {
+        "first": 0,
+        "type": "ukkari"
+      },
+      {
+        "first": 1,
+        "second": 4,
+        "type": "goikenban"
+      },
+      {
+        "first": 1,
+        "type": "gyakubari"
+      },
+      {
+        "first": 2,
+        "second": 5,
+        "type": "meitantei"
+      },
+      {
+        "first": 2,
+        "type": "niowase"
+      },
+      {
+        "first": 3,
+        "second": 4,
+        "type": "repbattle"
+      },
+      {
+        "first": 3,
+        "type": "yuwakashi"
+      },
+      {
+        "first": 4,
+        "second": 1,
+        "type": "goikenban"
+      },
+      {
+        "first": 4,
+        "type": "yajiuma"
+      },
+      {
+        "first": 5,
+        "second": 2,
+        "type": "meitantei"
+      },
+      {
+        "first": 5,
+        "type": "gobaku"
+      }
+    ],
+    "default": "bouka"
+  },
+  "types": {
+    "ukkari": {
+      "name": "うっかり失言",
+      "label": "うっかり失言型",
+      "desc": "悪気はゼロ、なのに燃料供給量はトップクラス。テンションが上がると口のブレーキがどんどん甘くなり、盛り上がった空気の中で「今の言っちゃダメなやつでは？」という一言がスルッと出てしまう。配信後にアーカイブを見返して一人で青ざめるのがお決まりのコース。ただし根が素直で取り繕わないので、多少の失言は「まあこの人だしな」で流してもらえる人徳持ち。周りに愛されて守られる、憎めない火種製造機。",
+      "streamer": "盛り上がった時こそ一呼吸。固有名詞・お金・他人の話は「言う前に3秒」ルールを。",
+      "fan": "変に取り繕わず「言葉が足りませんでした」と早めにシンプルに。素直さがあなたの消火器です。",
+      "illust": "img/types/enjou-type/ukkari.png",
+      "illustSvg": "<svg viewBox=\"0 0 200 200\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"6\" y=\"6\" width=\"188\" height=\"188\" rx=\"28\" fill=\"#FDE9F2\" stroke=\"#F2679F\" stroke-width=\"5\"/><circle cx=\"100\" cy=\"84\" r=\"44\" fill=\"#FFFFFF\" stroke=\"#F2679F\" stroke-width=\"4\"/><text x=\"100\" y=\"100\" font-family=\"sans-serif\" font-size=\"42\" font-weight=\"bold\" fill=\"#F2679F\" text-anchor=\"middle\">口</text><text x=\"100\" y=\"165\" font-family=\"sans-serif\" font-size=\"15\" font-weight=\"bold\" fill=\"#3B3B5C\" text-anchor=\"middle\">うっかり失言</text><text x=\"100\" y=\"184\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#8B8BA8\" text-anchor=\"middle\">イラスト準備中</text></svg>"
+    },
+    "dokuzetsu": {
+      "name": "毒舌ノンストップ",
+      "label": "毒舌ノンストップ型",
+      "desc": "切れ味のあるトークが最大の武器で、同時に最大の火種。一度エンジンがかかると毒がノンストップで供給され、リスナーは「今日も飛ばしてるな」と笑いながらヒヤヒヤしている。ファンは「その毒が好き」で集まっているが、切り抜かれて文脈が消えた瞬間に着火するのがこのタイプの宿命。攻めた発言と失言は常に紙一重のハイリスク・ハイリターンの花形で、燃えなければ最高に面白い人、というギリギリの綱渡りを毎日している。",
+      "streamer": "毒舌の対象は「強いもの・自分・作品」まで。個人や属性に向けた瞬間に火薬になります。",
+      "fan": "「ネタでした」で逃げると二次燃焼します。行き過ぎた部分だけを切り分けて認めるのが最短ルート。",
+      "illust": "img/types/enjou-type/dokuzetsu.png",
+      "illustSvg": "<svg viewBox=\"0 0 200 200\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"6\" y=\"6\" width=\"188\" height=\"188\" rx=\"28\" fill=\"#DDF1FC\" stroke=\"#5FB8EE\" stroke-width=\"5\"/><circle cx=\"100\" cy=\"84\" r=\"44\" fill=\"#FFFFFF\" stroke=\"#5FB8EE\" stroke-width=\"4\"/><text x=\"100\" y=\"100\" font-family=\"sans-serif\" font-size=\"42\" font-weight=\"bold\" fill=\"#5FB8EE\" text-anchor=\"middle\">毒</text><text x=\"100\" y=\"165\" font-family=\"sans-serif\" font-size=\"15\" font-weight=\"bold\" fill=\"#3B3B5C\" text-anchor=\"middle\">毒舌ノンストップ</text><text x=\"100\" y=\"184\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#8B8BA8\" text-anchor=\"middle\">イラスト準備中</text></svg>"
+    },
+    "gyakugire": {
+      "name": "ライターカチカチ燃焼",
+      "label": "ライターカチカチ燃焼型",
+      "desc": "他人の可燃物のすぐそばで、ライターをカチカチやりたくなる挑発気質。相手が嫌がる話題、触れてほしくない過去、界隈のデリケートな部分——燃えそうなものを見つけると、つい火の粉を飛ばして反応を確かめたくなる。本人の中では「いじり」「ツッコミ」の範囲でも、着火した瞬間に「そんなつもりじゃなかった」は通用しない。相手の急所を一瞬で見抜く観察眼は本物なので、その目を笑いや企画に使えば人を燃やさず場を沸かせる側に回れる。",
+      "streamer": "カチカチする前に「これは相手の可燃物では？」と一度確認を。いじりは相手が笑えてこそ成立します。",
+      "fan": "「冗談のつもりだった」は火に油です。火をつけた側の自覚を持って、言い訳より先に謝るのが最短の鎮火です。",
+      "illust": "img/types/enjou-type/gyakugire.png",
+      "illustSvg": "<svg viewBox=\"0 0 200 200\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"6\" y=\"6\" width=\"188\" height=\"188\" rx=\"28\" fill=\"#FFF3D6\" stroke=\"#F7C948\" stroke-width=\"5\"/><circle cx=\"100\" cy=\"84\" r=\"44\" fill=\"#FFFFFF\" stroke=\"#F7C948\" stroke-width=\"4\"/><text x=\"100\" y=\"100\" font-family=\"sans-serif\" font-size=\"42\" font-weight=\"bold\" fill=\"#F7C948\" text-anchor=\"middle\">燃</text><text x=\"100\" y=\"165\" font-family=\"sans-serif\" font-size=\"15\" font-weight=\"bold\" fill=\"#3B3B5C\" text-anchor=\"middle\">ライターカチカチ燃焼</text><text x=\"100\" y=\"184\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#8B8BA8\" text-anchor=\"middle\">イラスト準備中</text></svg>"
+    },
+    "goikenban": {
+      "name": "界隈ご意見番",
+      "label": "界隈ご意見番型",
+      "desc": "時事もトレンドも界隈のもめごとも、すべてに見解を持ち、すべてに言及したくなる評論家気質。的を射ている時は「この人の意見待ってた」と頼られる論客で、実際に分析力も言語化力も高い。ただし守備範囲を超えた話題に踏み込んだ瞬間、今度は自分が議題になるのがこのタイプの様式美。気付けばマイクを持って舞台に乱入している。語れる分野では本当に強いので、「これは自分が語るべき話か？」のフィルターさえあれば無敵。",
+      "streamer": "言及する前に「これは自分が語るべき話か？」と一度だけ自問を。7割はスルーで良い話です。",
+      "fan": "過去の自分の発言が掘られやすいタイプ。矛盾を認める潔さが、評論家としての信頼を守ります。",
+      "illust": "img/types/enjou-type/goikenban.png",
+      "illustSvg": "<svg viewBox=\"0 0 200 200\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"6\" y=\"6\" width=\"188\" height=\"188\" rx=\"28\" fill=\"#FDE9F2\" stroke=\"#F2679F\" stroke-width=\"5\"/><circle cx=\"100\" cy=\"84\" r=\"44\" fill=\"#FFFFFF\" stroke=\"#F2679F\" stroke-width=\"4\"/><text x=\"100\" y=\"100\" font-family=\"sans-serif\" font-size=\"42\" font-weight=\"bold\" fill=\"#F2679F\" text-anchor=\"middle\">論</text><text x=\"100\" y=\"165\" font-family=\"sans-serif\" font-size=\"15\" font-weight=\"bold\" fill=\"#3B3B5C\" text-anchor=\"middle\">界隈ご意見番</text><text x=\"100\" y=\"184\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#8B8BA8\" text-anchor=\"middle\">イラスト準備中</text></svg>"
+    },
+    "gyakubari": {
+      "name": "逆張りディベーター",
+      "label": "逆張りディベーター型",
+      "desc": "みんなが右と言えば、とりあえず左を検討したくなる生まれながらの議論好き。多数派の空気に流されず違和感を言語化できる能力は本当に貴重で、界隈が一色に染まった時にブレーキ役になれる稀有な存在。ただし「あえて言うけど」の枕詞は火打ち石であり、本人は議論のつもりでも、周りには喧嘩を売っているようにしか見えていないことがしばしば。問いの形で出せば議論に、断定で出せば炎上になる。語尾ひとつで運命が変わるタイプ。",
+      "streamer": "逆張りは「問い」の形で出すと議論に、「断定」で出すと炎上になります。語尾に注意。",
+      "fan": "「議論がしたかっただけ」は通じにくい世界です。相手を言い負かす路線を捨てた側が生き残ります。",
+      "illust": "img/types/enjou-type/gyakubari.png",
+      "illustSvg": "<svg viewBox=\"0 0 200 200\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"6\" y=\"6\" width=\"188\" height=\"188\" rx=\"28\" fill=\"#DDF1FC\" stroke=\"#5FB8EE\" stroke-width=\"5\"/><circle cx=\"100\" cy=\"84\" r=\"44\" fill=\"#FFFFFF\" stroke=\"#5FB8EE\" stroke-width=\"4\"/><text x=\"100\" y=\"100\" font-family=\"sans-serif\" font-size=\"42\" font-weight=\"bold\" fill=\"#5FB8EE\" text-anchor=\"middle\">⇄</text><text x=\"100\" y=\"165\" font-family=\"sans-serif\" font-size=\"15\" font-weight=\"bold\" fill=\"#3B3B5C\" text-anchor=\"middle\">逆張りディベーター</text><text x=\"100\" y=\"184\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#8B8BA8\" text-anchor=\"middle\">イラスト準備中</text></svg>"
+    },
+    "meitantei": {
+      "name": "うっかり匂わせ",
+      "label": "うっかり匂わせ型",
+      "desc": "匂わせるつもりは1ミリもないのに、うっかりの積み重ねでネットの名探偵たちに事件を提供し続けてしまうタイプ。窓ガラスの映り込み、消し忘れのタブ、アカウントの取り違え、投稿時間の一致——本人の自覚がないヒントの宝庫で、特定班にとっては大好物の物件。隠す意思はあるのに脇だけが甘い。投稿前チェックの習慣さえ身につけば一気に鉄壁になれるので、伸びしろは12タイプ中トップクラス。",
+      "streamer": "投稿前チェックリスト(映り込み・位置情報・アカウント名)を物理メモで貼っておきましょう。",
+      "fan": "掘られてからの後出し説明は燃えます。出てしまった情報は早めに自分から整理して開示判断を。",
+      "illust": "img/types/enjou-type/meitantei.png",
+      "illustSvg": "<svg viewBox=\"0 0 200 200\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"6\" y=\"6\" width=\"188\" height=\"188\" rx=\"28\" fill=\"#FFF3D6\" stroke=\"#F7C948\" stroke-width=\"5\"/><circle cx=\"100\" cy=\"84\" r=\"44\" fill=\"#FFFFFF\" stroke=\"#F7C948\" stroke-width=\"4\"/><text x=\"100\" y=\"100\" font-family=\"sans-serif\" font-size=\"42\" font-weight=\"bold\" fill=\"#F7C948\" text-anchor=\"middle\">匂</text><text x=\"100\" y=\"165\" font-family=\"sans-serif\" font-size=\"15\" font-weight=\"bold\" fill=\"#3B3B5C\" text-anchor=\"middle\">うっかり匂わせ</text><text x=\"100\" y=\"184\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#8B8BA8\" text-anchor=\"middle\">イラスト準備中</text></svg>"
+    },
+    "niowase": {
+      "name": "匂わせ超えて嗅がせ",
+      "label": "匂わせ超えて嗅がせ型",
+      "desc": "隠しているつもりが、もはや全員に嗅がせにいっているレベルでにじみ出ているタイプ。嬉しいことがあれば声のトーンが3割増しになり、交友関係は呼び方と距離感で丸わかり、投稿時間まで雄弁に語る。本人だけが「バレてない」と思っているのが最大のチャームポイントで、リスナーは全員察した上で優しく見守っている。裏表がなく感情が素直に出る性質は配信者として大きな魅力でもあるので、出して良い情報を先に決める「攻めの情報設計」ができれば強い。",
+      "streamer": "「言わない」だけでは隠せていません。出して良い情報を先に決める攻めの情報設計が有効です。",
+      "fan": "憶測が広がったら、否定も肯定もしない一貫した線を決めて全員に同じ対応を。場当たりが一番燃えます。",
+      "illust": "img/types/enjou-type/niowase.png",
+      "illustSvg": "<svg viewBox=\"0 0 200 200\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"6\" y=\"6\" width=\"188\" height=\"188\" rx=\"28\" fill=\"#FDE9F2\" stroke=\"#F2679F\" stroke-width=\"5\"/><circle cx=\"100\" cy=\"84\" r=\"44\" fill=\"#FFFFFF\" stroke=\"#F2679F\" stroke-width=\"4\"/><text x=\"100\" y=\"100\" font-family=\"sans-serif\" font-size=\"42\" font-weight=\"bold\" fill=\"#F2679F\" text-anchor=\"middle\">嗅</text><text x=\"100\" y=\"165\" font-family=\"sans-serif\" font-size=\"15\" font-weight=\"bold\" fill=\"#3B3B5C\" text-anchor=\"middle\">匂わせ超えて嗅がせ</text><text x=\"100\" y=\"184\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#8B8BA8\" text-anchor=\"middle\">イラスト準備中</text></svg>"
+    },
+    "repbattle": {
+      "name": "リプ欄格闘家",
+      "label": "リプ欄格闘家型",
+      "desc": "売られた喧嘩は定価で買い、なんなら他人の喧嘩にもセコンドとして参戦する武闘派。瞬発力と胆力は本物で、理不尽に対して黙らない姿勢に痺れるファンも確実にいる。ただしリングの外にいる観客——つまり第三者には「どっちも怖い」と映っているのが現実で、勝敗に関係なく印象点で損をしがち。戦うべき場面を選べるようになれば、その胆力は推しや仲間を守る盾になる。下書き保存という名のクールダウンを覚えたら最強。",
+      "streamer": "反論したくなったら下書きに保存して寝る。翌朝見て強度が変わらなければ、その時だけ送信を。",
+      "fan": "燃えている最中の応戦は薪です。スクショ保存と記録だけ残し、対応は落ち着いてから一括で。",
+      "illust": "img/types/enjou-type/repbattle.png",
+      "illustSvg": "<svg viewBox=\"0 0 200 200\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"6\" y=\"6\" width=\"188\" height=\"188\" rx=\"28\" fill=\"#DDF1FC\" stroke=\"#5FB8EE\" stroke-width=\"5\"/><circle cx=\"100\" cy=\"84\" r=\"44\" fill=\"#FFFFFF\" stroke=\"#5FB8EE\" stroke-width=\"4\"/><text x=\"100\" y=\"100\" font-family=\"sans-serif\" font-size=\"42\" font-weight=\"bold\" fill=\"#5FB8EE\" text-anchor=\"middle\">闘</text><text x=\"100\" y=\"165\" font-family=\"sans-serif\" font-size=\"15\" font-weight=\"bold\" fill=\"#3B3B5C\" text-anchor=\"middle\">リプ欄格闘家</text><text x=\"100\" y=\"184\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#8B8BA8\" text-anchor=\"middle\">イラスト準備中</text></svg>"
+    },
+    "yuwakashi": {
+      "name": "瞬間湯沸かし器",
+      "label": "瞬間湯沸かし器型",
+      "desc": "沸点が低く、冷めるのも早い。カッとなった瞬間の5分間にすべてを出力してしまい、5分後には冷静になっているのに、5分前の自分が残した投稿だけが消せない証拠として残る——という時間差攻撃を自分に食らい続けるタイプ。感情の温度が高いこと自体は配信の熱量やリアクションの良さに直結する才能で、リスナーを引き込む力は本物。「怒りの投稿は30分寝かせる」というたった一つのルールで火種の8割が消えるので、実はコスパ良く更生できる。",
+      "streamer": "「怒りの投稿は30分寝かせる」を鉄の掟に。あなたの場合それだけで火種の8割が消えます。",
+      "fan": "勢いで出した言葉なら、冷めた自分が早めに撤回を。時間が経つほど「本心だった」扱いになります。",
+      "illust": "img/types/enjou-type/yuwakashi.png",
+      "illustSvg": "<svg viewBox=\"0 0 200 200\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"6\" y=\"6\" width=\"188\" height=\"188\" rx=\"28\" fill=\"#FFF3D6\" stroke=\"#F7C948\" stroke-width=\"5\"/><circle cx=\"100\" cy=\"84\" r=\"44\" fill=\"#FFFFFF\" stroke=\"#F7C948\" stroke-width=\"4\"/><text x=\"100\" y=\"100\" font-family=\"sans-serif\" font-size=\"42\" font-weight=\"bold\" fill=\"#F7C948\" text-anchor=\"middle\">沸</text><text x=\"100\" y=\"165\" font-family=\"sans-serif\" font-size=\"15\" font-weight=\"bold\" fill=\"#3B3B5C\" text-anchor=\"middle\">瞬間湯沸かし器</text><text x=\"100\" y=\"184\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#8B8BA8\" text-anchor=\"middle\">イラスト準備中</text></svg>"
+    },
+    "yajiuma": {
+      "name": "巻き込まれ炎上",
+      "label": "巻き込まれ炎上型",
+      "desc": "自分の火種はほとんど持っていないのに、火事と聞けば現場に駆けつける好奇心が命取りになるタイプ。観戦だけなら無傷で済むのに、リプ欄を熟読するうちについ一言添えたくなり、知り合いが燃えていれば擁護に向かい、気付けば火元でもないのに煤だらけ。12タイプ中で唯一「もらい火」が主な出火原因で、本人の善良さと野次馬根性が絶妙にブレンドされている。言及した時点で当事者になる、この一行を覚えるだけで無事に観戦を楽しめる。",
+      "streamer": "観るのは自由、触れるのは別問題。言及した時点で当事者になる、と覚えておきましょう。",
+      "fan": "巻き込まれ型なら「私は無関係です」より、関わった範囲を正確に説明する方が早く沈静化します。",
+      "illust": "img/types/enjou-type/yajiuma.png",
+      "illustSvg": "<svg viewBox=\"0 0 200 200\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"6\" y=\"6\" width=\"188\" height=\"188\" rx=\"28\" fill=\"#FDE9F2\" stroke=\"#F2679F\" stroke-width=\"5\"/><circle cx=\"100\" cy=\"84\" r=\"44\" fill=\"#FFFFFF\" stroke=\"#F2679F\" stroke-width=\"4\"/><text x=\"100\" y=\"100\" font-family=\"sans-serif\" font-size=\"42\" font-weight=\"bold\" fill=\"#F2679F\" text-anchor=\"middle\">巻</text><text x=\"100\" y=\"165\" font-family=\"sans-serif\" font-size=\"15\" font-weight=\"bold\" fill=\"#3B3B5C\" text-anchor=\"middle\">巻き込まれ炎上</text><text x=\"100\" y=\"184\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#8B8BA8\" text-anchor=\"middle\">イラスト準備中</text></svg>"
+    },
+    "gobaku": {
+      "name": "テクニカル火種",
+      "label": "テクニカル火種型",
+      "desc": "発言の内容ではなく、操作で燃える技巧派。裏の愚痴を表アカウントに、DMの内容をタイムラインに、個人情報を画面共有に——狙っていないところへ正確に着弾させる腕前は、ある意味で天才的。複数アカウントの使い分け、出しっぱなしの通知、勢いで押す送信ボタンと、火種はすべて指先に宿っている。逆に言えば発言そのものは燃えない安全運転なので、裏と表をアプリごと物理的に分離するだけで、12タイプ中もっとも簡単に無害化できる。",
+      "streamer": "裏と表でアプリやブラウザごと分ける物理的分離が最強です。意志の力に頼ってはいけません。",
+      "fan": "誤爆は隠すほど燃えます。消す前にスクショが回る前提で、早めに「誤操作でした」と自己申告を。",
+      "illust": "img/types/enjou-type/gobaku.png",
+      "illustSvg": "<svg viewBox=\"0 0 200 200\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"6\" y=\"6\" width=\"188\" height=\"188\" rx=\"28\" fill=\"#DDF1FC\" stroke=\"#5FB8EE\" stroke-width=\"5\"/><circle cx=\"100\" cy=\"84\" r=\"44\" fill=\"#FFFFFF\" stroke=\"#5FB8EE\" stroke-width=\"4\"/><text x=\"100\" y=\"100\" font-family=\"sans-serif\" font-size=\"42\" font-weight=\"bold\" fill=\"#5FB8EE\" text-anchor=\"middle\">誤</text><text x=\"100\" y=\"165\" font-family=\"sans-serif\" font-size=\"15\" font-weight=\"bold\" fill=\"#3B3B5C\" text-anchor=\"middle\">テクニカル火種</text><text x=\"100\" y=\"184\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#8B8BA8\" text-anchor=\"middle\">イラスト準備中</text></svg>"
+    },
+    "bouka": {
+      "name": "完全不燃物",
+      "label": "完全不燃物型",
+      "desc": "全方位バランス型で、突出した火種を一つも持たない耐火建築。危険察知・言葉選び・距離感・操作の丁寧さまで、すべてが平均以上に整っており、炎上界隈では「燃える要素が見当たらない人」として知られるレア枠。この診断でも20人に1人程度しか出ない希少タイプで、引けたら胸を張っていい。周囲からは安心感の塊として扱われ、界隈で火が上がると消火役や相談役を任されがち。唯一の弱点はもらい火なので、他人の火事に近づかないことだけ守れば盤石。",
+      "streamer": "あなた自身は燃えにくいので、あとは「他人の火事に近づかない」だけ守れば盤石です。",
+      "fan": "万一燃えたら、それはもらい事故の可能性大。慌てず事実関係の整理から始めれば大丈夫です。",
+      "illust": "img/types/enjou-type/bouka.png",
+      "illustSvg": "<svg viewBox=\"0 0 200 200\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"6\" y=\"6\" width=\"188\" height=\"188\" rx=\"28\" fill=\"#FFF3D6\" stroke=\"#F7C948\" stroke-width=\"5\"/><circle cx=\"100\" cy=\"84\" r=\"44\" fill=\"#FFFFFF\" stroke=\"#F7C948\" stroke-width=\"4\"/><text x=\"100\" y=\"100\" font-family=\"sans-serif\" font-size=\"42\" font-weight=\"bold\" fill=\"#F7C948\" text-anchor=\"middle\">防</text><text x=\"100\" y=\"165\" font-family=\"sans-serif\" font-size=\"15\" font-weight=\"bold\" fill=\"#3B3B5C\" text-anchor=\"middle\">完全不燃物</text><text x=\"100\" y=\"184\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#8B8BA8\" text-anchor=\"middle\">イラスト準備中</text></svg>"
+    }
+  },
+  "iconSvg": "<svg viewBox=\"0 0 64 64\" xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\"><path d=\"M32 6c2 10-8 13-8 22 0 5 3 8 3 8s-9-2-9-13C12 34 8 38 8 45c0 10 10 15 24 15s24-5 24-15c0-7-4-11-10-22 0 11-9 13-9 13s3-3 3-8c0-9-10-12-8-22z\" fill=\"#F2679F\" stroke=\"#EE4D93\" stroke-width=\"3\" stroke-linejoin=\"round\"/><path d=\"M32 36c1 5-4 7-4 12 0 4 2 6 4 6s4-2 4-6c0-5-5-7-4-12z\" fill=\"#F7C948\" stroke=\"#EE4D93\" stroke-width=\"2.5\" stroke-linejoin=\"round\"/></svg>"
+}
