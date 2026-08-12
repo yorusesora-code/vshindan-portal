@@ -68,6 +68,8 @@ VTuber・配信者・活動者向けの診断ポータルサイト。
 {
   "id": "診断ID(ファイル名と一致・半角英数ハイフン)",
   "emoji": "🎙️",
+  "iconSvg": "<svg>…</svg>",     // 省略可。あればスタート画面で emoji の代わりに表示
+  "accentIcon": "<svg>…</svg>",  // 省略可。あれば結果バッジ横に小アイコン表示
   "title": "診断タイトル",
   "shortTitle": "短縮タイトル",
   "description": "説明文(スタート画面とmeta descriptionに使用)",
@@ -95,11 +97,17 @@ VTuber・配信者・活動者向けの診断ポータルサイト。
       "label": "◯◯型リスナー等のフルネーム",
       "desc": "結果の説明文",
       "streamer": "補足1(tipLabels[0]に対応)",
-      "fan": "補足2(tipLabels[1]に対応)"
+      "fan": "補足2(tipLabels[1]に対応)",
+      "illust": "img/types/{診断ID}/{タイプID}.png",  // 省略可。結果上部のタイプ絵
+      "illustSvg": "<svg>…</svg>"   // 省略可。illustのPNGが404のときの差し替え/暫定絵
     }
   }
 }
 ```
+
+補足: `iconSvg`/`accentIcon`/`illust`/`illustSvg` はすべて任意。`illust` を指定しても
+`img/types/{診断ID}/{タイプID}.png` が無ければ自動的に `illustSvg`(インラインSVG)へフォールバックする。
+つまり**イラストは後から `img/types/…` にPNGを置くだけで差し替わる**。
 
 ## 診断を1本追加する手順
 
