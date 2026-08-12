@@ -32,7 +32,8 @@ body{background:var(--bg);color:var(--ink);font-family:'M PLUS Rounded 1c',-appl
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:1.5rem 1.25rem;box-shadow:0 2px 12px rgba(242,103,159,.10)}
 
 /* ===== スタート ===== */
-.start-emoji{font-size:52px;text-align:center;margin-bottom:.5rem}
+.start-emoji{font-size:52px;text-align:center;margin-bottom:.5rem;line-height:1}
+.start-emoji svg{width:1.2em;height:1.2em;vertical-align:-.2em}
 .start-title{font-size:24px;font-weight:900;text-align:center;line-height:1.4;margin-bottom:.75rem;color:var(--night-deep)}
 .start-desc{font-size:14px;color:var(--ink-soft);line-height:1.8;text-align:center;margin-bottom:1.25rem}
 .start-meta{display:flex;justify-content:center;gap:12px;margin-bottom:1.5rem}
@@ -120,6 +121,8 @@ body{background:var(--bg);color:var(--ink);font-family:'M PLUS Rounded 1c',-appl
 
 /* ===== 結果画面 ===== */
 .res-header{text-align:center;margin-bottom:1.25rem}
+#res-illust{display:none;margin:0 auto 12px;width:min(180px,50vw)}
+#res-illust img,#res-illust svg{width:100%;height:auto;border-radius:16px;display:block}
 .res-badge{display:inline-block;background:var(--pink-pale);color:var(--accent);border-radius:999px;
   padding:6px 18px;font-size:13px;font-weight:700;margin-bottom:.75rem}
 .res-type{font-size:24px;font-weight:900;margin-bottom:.75rem;line-height:1.4;color:var(--night-deep)}
@@ -176,10 +179,11 @@ body{background:var(--bg);color:var(--ink);font-family:'M PLUS Rounded 1c',-appl
 @keyframes flicker{0%,100%{transform:scale(1) rotate(0)}
   30%{transform:scale(1.12,.9) rotate(-4deg)}65%{transform:scale(.92,1.1) rotate(4deg)}}
 
-.revealing .res-badge{animation:pop .42s var(--bounce) .10s both}
-.revealing .res-type{animation:pop .5s var(--bounce) .34s both}
-.revealing .accent-ico{animation:pop .5s var(--bounce) .16s both}
-.revealing .accent-ico svg .fl{animation:flicker 1.5s ease-in-out .8s infinite}
+.revealing #res-illust{animation:pop .5s var(--bounce) .04s both}
+.revealing .res-badge{animation:pop .42s var(--bounce) .22s both}
+.revealing .res-type{animation:pop .5s var(--bounce) .40s both}
+.revealing .accent-ico{animation:pop .5s var(--bounce) .28s both}
+.revealing .accent-ico svg .fl{animation:flicker 1.5s ease-in-out .9s infinite}
 .revealing .res-desc{animation:rise .42s var(--e-firm) .62s both}
 .revealing .res-tips{animation:rise .42s var(--e-firm) .78s both}
 .revealing .radar .edge{animation:draw .95s var(--e-firm) .88s forwards}
@@ -248,6 +252,7 @@ footer{text-align:center;font-size:11px;color:var(--ink-faint);margin-top:2.5rem
   <!-- 結果画面 -->
   <div class="screen card" id="screen-result">
     <div class="res-header">
+      <div id="res-illust"></div>
       <div class="res-badge" id="res-badge"></div>
       <div class="res-type" id="res-type"></div>
       <div class="res-desc" id="res-desc"></div>
@@ -293,7 +298,8 @@ async function init(){
   answers=new Array(QUIZ.questions.length).fill(null);
   document.title=`${QUIZ.title} | VTuber診断ポータル`;
   document.querySelector('meta[name="description"]').content=QUIZ.description;
-  document.getElementById('st-emoji').textContent=QUIZ.emoji||'✨';
+  const _ic=document.getElementById('st-emoji');
+  if(QUIZ.iconSvg){_ic.innerHTML=QUIZ.iconSvg;}else{_ic.textContent=QUIZ.emoji||'✨';}
   document.getElementById('st-title').textContent=QUIZ.title;
   document.getElementById('st-desc').textContent=QUIZ.description;
   document.getElementById('st-count').textContent=`全${QUIZ.questions.length}問`;
@@ -457,6 +463,18 @@ function showResult(){
   const type=QUIZ.types[typeId];
   lastResult={scores,typeId,type};
   show('screen-result');
+
+  /* タイプイラスト: illust(PNG) があれば優先し、404なら illustSvg に自動フォールバック。
+     img/types/<診断id>/<タイプキー>.png を置くだけで差し替わる */
+  const ill=document.getElementById('res-illust');
+  if(type.illust||type.illustSvg){
+    ill.style.display='block';
+    if(type.illust){
+      window.__ILLSVG=type.illustSvg||'';
+      ill.innerHTML=`<img src="${esc(type.illust)}" alt="${esc(type.name)}" `+
+        `onerror="this.parentNode.innerHTML=window.__ILLSVG||''">`;
+    }else{ ill.innerHTML=type.illustSvg; }
+  }else{ ill.style.display='none'; ill.innerHTML=''; }
 
   const ico = QUIZ.accentIcon ? `<span class="accent-ico">${QUIZ.accentIcon}</span>` : '';
   document.getElementById('res-badge').innerHTML = ico + esc(type.name);
