@@ -10,68 +10,214 @@
 <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#F5F2FF; --card:#FFFFFF; --ink:#2A2740; --ink-soft:#6B6685; --ink-faint:#A19CBF;
-  --violet:#7F77DD; --violet-deep:#3C3489; --violet-pale:#EEEDFE; --line:#E4E0F5;
-  --pink:#F4A0C6; --radius:16px;
+  /* ===== トップページと同じ最新配色（ピンク×水色） ===== */
+  --bg:#FFF7FA; --card:#FFFFFF; --ink:#3B3B5C; --ink-soft:#8B8BA8; --ink-faint:#BCBCD2;
+  --pink:#F2679F; --accent:#EE4D93; --pink-pale:#FDE9F2;
+  --blue:#5FB8EE; --blue-pale:#DDF1FC; --star:#F7C948;
+  --night:#3B3B5C; --night-deep:#32324E; --line:#F6CFE0;
+  --radius:16px;
+  /* トップページの署名イージング */
+  --bounce:cubic-bezier(0.19,1.74,0.47,0.62);
+  --e-snap:cubic-bezier(.34,1.4,.5,1);
+  --e-firm:cubic-bezier(.5,0,.2,1);
+  --e-soft:cubic-bezier(.4,0,.2,1);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--ink);font-family:'M PLUS Rounded 1c',-apple-system,sans-serif;min-height:100vh}
 .wrap{max-width:640px;margin:0 auto;padding:1.25rem 1rem 3rem}
 .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem}
 .topbar a{color:var(--ink-soft);font-size:13px;text-decoration:none;font-weight:500}
-.topbar a:hover{color:var(--violet-deep)}
+.topbar a:hover{color:var(--accent)}
 .screen{display:none}.screen.active{display:block}
-.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:1.5rem 1.25rem;box-shadow:0 2px 12px rgba(127,119,221,.07)}
-/* start */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:1.5rem 1.25rem;box-shadow:0 2px 12px rgba(242,103,159,.10)}
+
+/* ===== スタート ===== */
 .start-emoji{font-size:52px;text-align:center;margin-bottom:.5rem}
-.start-title{font-size:24px;font-weight:900;text-align:center;line-height:1.4;margin-bottom:.75rem;color:var(--violet-deep)}
+.start-title{font-size:24px;font-weight:900;text-align:center;line-height:1.4;margin-bottom:.75rem;color:var(--night-deep)}
 .start-desc{font-size:14px;color:var(--ink-soft);line-height:1.8;text-align:center;margin-bottom:1.25rem}
 .start-meta{display:flex;justify-content:center;gap:12px;margin-bottom:1.5rem}
-.start-meta span{background:var(--violet-pale);color:var(--violet-deep);font-size:12px;font-weight:700;border-radius:999px;padding:5px 14px}
-/* quiz */
-.prog-bg{height:6px;background:var(--line);border-radius:3px;margin-bottom:1.5rem;overflow:hidden}
-.prog-fill{height:6px;background:linear-gradient(90deg,var(--violet),var(--pink));border-radius:3px;transition:width .3s}
-.q-num{font-size:12px;font-weight:700;color:var(--violet);margin-bottom:.5rem}
-.q-text{font-size:18px;font-weight:700;margin-bottom:1.5rem;line-height:1.6}
+.start-meta span{background:var(--pink-pale);color:var(--accent);font-size:12px;font-weight:700;border-radius:999px;padding:5px 14px}
+.start-meta span:nth-child(2){background:var(--blue-pale);color:#2E7FB0}
+
+/* ===== 質問画面 ===== */
+.prog-row{display:flex;align-items:center;gap:10px;margin-bottom:1.4rem}
+.prog-bg{flex:1;height:8px;background:var(--line);border-radius:4px;overflow:hidden}
+.prog-fill{height:8px;border-radius:4px;width:0;position:relative;overflow:hidden;
+  background:linear-gradient(90deg,var(--pink),var(--blue));
+  transition:width .42s var(--e-firm)}
+/* 伸びた瞬間だけ光沢を1度だけ走らせる */
+.prog-fill::after{content:"";position:absolute;top:0;bottom:0;width:38px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.9),transparent);
+  transform:translateX(-60px);opacity:0}
+.prog-fill.bump::after{animation:sheen .55s var(--e-firm) .06s}
+@keyframes sheen{0%{transform:translateX(-60px);opacity:0}25%{opacity:1}
+  100%{transform:translateX(340px);opacity:0}}
+
+.remain{flex:none;font-size:11px;font-weight:700;color:var(--ink-soft);display:flex;align-items:center;gap:3px;white-space:nowrap}
+.roll{display:inline-block;height:15px;overflow:hidden;position:relative;width:1.6em;text-align:right}
+.roll-strip{display:block;transition:transform .42s var(--e-firm)}
+.roll-strip span{display:block;height:15px;line-height:15px;font-size:14px;font-weight:900;color:var(--accent)}
+
+.q-num{font-size:12px;font-weight:700;color:var(--pink);margin-bottom:.5rem}
+.q-text{font-size:18px;font-weight:700;margin-bottom:1.4rem;line-height:1.6}
+
+/* 設問の入れ替え */
+.q-body.out-l{animation:outL .2s var(--e-soft) forwards}
+.q-body.out-r{animation:outR .2s var(--e-soft) forwards}
+.q-body.in-r{animation:inR .34s var(--e-firm) both}
+.q-body.in-l{animation:inL .34s var(--e-firm) both}
+@keyframes outL{to{opacity:0;transform:translateX(-24px)}}
+@keyframes outR{to{opacity:0;transform:translateX(24px)}}
+@keyframes inR{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
+@keyframes inL{from{opacity:0;transform:translateX(-24px)}to{opacity:1;transform:none}}
+
 .options{display:flex;flex-direction:column;gap:10px}
-.opt-btn{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:14px 18px;font-size:15px;font-family:inherit;color:var(--ink);cursor:pointer;text-align:left;transition:border-color .15s,background .15s;line-height:1.5}
-.opt-btn:hover{border-color:var(--violet)}
-.opt-btn.selected{border-color:var(--violet);background:var(--violet-pale);color:var(--violet-deep);font-weight:700}
-.nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:1.5rem}
-.nav-btn{background:transparent;border:1.5px solid var(--line);border-radius:10px;padding:10px 22px;font-size:14px;font-family:inherit;font-weight:700;color:var(--ink-soft);cursor:pointer}
-.nav-btn.primary{background:var(--violet);border-color:var(--violet);color:#fff}
+.q-body.in-r .opt-btn,.q-body.in-l .opt-btn{animation:optIn .3s var(--e-firm) both}
+.opt-btn:nth-child(1){animation-delay:.04s}
+.opt-btn:nth-child(2){animation-delay:.09s}
+.opt-btn:nth-child(3){animation-delay:.14s}
+.opt-btn:nth-child(4){animation-delay:.19s}
+.opt-btn:nth-child(5){animation-delay:.24s}
+@keyframes optIn{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
+
+.opt-btn{position:relative;overflow:hidden;background:var(--card);border:1.5px solid var(--line);
+  border-radius:12px;padding:14px 46px 14px 18px;font-size:15px;font-family:inherit;color:var(--ink);
+  cursor:pointer;text-align:left;line-height:1.5;
+  transition:border-color .18s var(--e-soft),color .2s var(--e-soft),transform .13s var(--e-soft)}
+@media (hover:hover){.opt-btn:hover{border-color:var(--pink)}}
+.opt-btn:active{transform:scale(.985)}
+.opt-btn:focus-visible{outline:2px solid var(--pink);outline-offset:2px}
+/* 塗りつぶし：scaleXでなくwidthで伸ばす（角丸が潰れないため） */
+.opt-sweep{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--pink-pale);
+  transition:width .3s var(--e-firm)}
+.opt-btn.selected .opt-sweep{width:100%}
+.opt-btn.selected{border-color:var(--pink);color:var(--accent);font-weight:700}
+.opt-label{position:relative}
+.opt-check{position:absolute;right:14px;top:50%;margin-top:-11px;width:22px;height:22px;border-radius:50%;
+  background:var(--pink);display:grid;place-items:center;transform:scale(0);
+  transition:transform .3s var(--bounce) .1s}
+.opt-btn.selected .opt-check{transform:scale(1)}
+.opt-check svg{width:12px;height:12px;fill:none;stroke:#fff;stroke-width:3;stroke-linecap:round;
+  stroke-linejoin:round;stroke-dasharray:16;stroke-dashoffset:16;
+  transition:stroke-dashoffset .26s var(--e-firm) .22s}
+.opt-btn.selected .opt-check svg{stroke-dashoffset:0}
+
+.nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:1.5rem;gap:10px}
+.nav-btn{background:transparent;border:1.5px solid var(--line);border-radius:10px;padding:10px 22px;
+  font-size:14px;font-family:inherit;font-weight:700;color:var(--ink-soft);cursor:pointer;
+  transition:opacity .2s,border-color .18s}
 .nav-btn:disabled{opacity:.35;cursor:default}
-/* result */
+.nav-btn.primary{background:var(--pink);border-color:var(--pink);color:#fff;
+  position:relative;display:grid;place-items:center;
+  transition:background .3s var(--e-soft),opacity .2s}
+.nav-btn.primary .lbl{grid-area:1/1;white-space:nowrap;transition:opacity .2s,transform .24s var(--e-firm)}
+.nav-btn.primary .lbl.hide{opacity:0;transform:translateY(-8px)}
+.nav-btn.primary.final{background:linear-gradient(90deg,var(--pink),var(--blue))}
+.nav-btn.primary.ready{animation:glow 2.2s ease-in-out infinite}
+/* 当たり判定を動かさないよう、拡大でなく光で注目を促す */
+@keyframes glow{0%,100%{box-shadow:0 0 0 0 rgba(242,103,159,.45)}
+  50%{box-shadow:0 0 0 8px rgba(242,103,159,0)}}
+
+/* ===== 結果画面 ===== */
 .res-header{text-align:center;margin-bottom:1.25rem}
-.res-badge{display:inline-block;background:var(--violet-pale);color:var(--violet-deep);border-radius:999px;padding:6px 18px;font-size:13px;font-weight:700;margin-bottom:.75rem}
-.res-type{font-size:24px;font-weight:900;margin-bottom:.75rem;line-height:1.4;color:var(--violet-deep)}
+.res-badge{display:inline-block;background:var(--pink-pale);color:var(--accent);border-radius:999px;
+  padding:6px 18px;font-size:13px;font-weight:700;margin-bottom:.75rem}
+.res-type{font-size:24px;font-weight:900;margin-bottom:.75rem;line-height:1.4;color:var(--night-deep)}
 .res-desc{font-size:14px;color:var(--ink-soft);line-height:1.9;text-align:left}
-.res-tips{background:var(--bg);border-radius:12px;padding:14px 18px;margin:1.25rem 0}
-.res-tips-title{font-size:12px;font-weight:700;color:var(--violet);margin-bottom:8px}
+.res-tips{background:var(--blue-pale);border-radius:12px;padding:14px 18px;margin:1.25rem 0}
+.res-tips-title{font-size:12px;font-weight:700;color:#2E7FB0;margin-bottom:8px}
 .res-tip{font-size:13px;line-height:1.7;color:var(--ink)}
-.res-tip+.res-tip{border-top:1px solid var(--line);margin-top:8px;padding-top:8px}
-.chart-wrap{position:relative;height:280px;margin:0 auto 1.25rem;max-width:420px}
+.res-tip+.res-tip{border-top:1px solid rgba(95,184,238,.35);margin-top:8px;padding-top:8px}
+
+/* 診断ごとのアクセントアイコン（JSONの accentIcon があれば表示） */
+.accent-ico{position:relative;display:inline-block;width:15px;height:19px;vertical-align:-3px;margin-right:5px}
+.accent-ico svg{position:absolute;inset:0;width:15px;height:19px}
+.accent-ico svg .fl{transform-origin:50% 78%}
+
+.chart-wrap{max-width:340px;margin:0 auto 1.25rem}
+.radar{width:100%;height:auto;display:block;overflow:visible}
+.radar .grid{fill:none;stroke:var(--line);stroke-width:1}
+.radar .spoke{stroke:var(--line);stroke-width:1}
+.radar .lbl{font:700 11px 'M PLUS Rounded 1c',sans-serif;fill:var(--ink-soft)}
+.radar .area{fill:var(--pink);opacity:0}
+.radar .edge{fill:none;stroke:var(--pink);stroke-width:2.5;stroke-linejoin:round;
+  stroke-dashoffset:var(--len)}
+.radar .dot{fill:var(--pink);transform-box:fill-box;transform-origin:center;transform:scale(0)}
+
 .traits-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1.5rem}
 .trait-card{background:var(--bg);border-radius:10px;padding:10px 12px}
 .trait-label{font-size:11px;color:var(--ink-soft);font-weight:700}
-.trait-val{font-size:16px;font-weight:900;color:var(--violet-deep);margin:2px 0 6px}
+.trait-val{font-size:16px;font-weight:900;color:var(--accent);margin:2px 0 6px}
 .trait-bar-bg{height:5px;background:var(--line);border-radius:3px;overflow:hidden}
-.trait-bar-fill{height:5px;background:linear-gradient(90deg,var(--violet),var(--pink));border-radius:3px}
+.trait-bar-fill{height:5px;background:linear-gradient(90deg,var(--pink),var(--blue));border-radius:3px;width:0}
+
 .btn-stack{display:flex;flex-direction:column;gap:10px}
-.share-btn{display:block;width:100%;background:#0F1419;color:#fff;border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;text-align:center;text-decoration:none}
-.sub-btn{display:block;width:100%;background:var(--card);color:var(--violet-deep);border:1.5px solid var(--violet);border-radius:12px;padding:13px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;text-align:center}
-.ghost-btn{display:block;width:100%;background:transparent;color:var(--ink-soft);border:none;padding:10px;font-size:13px;font-family:inherit;cursor:pointer;text-align:center}
-.toast{display:none;position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:var(--ink);color:#fff;font-size:13px;border-radius:999px;padding:10px 22px;z-index:50}
+.share-btn{display:block;width:100%;background:#0F1419;color:#fff;border:none;border-radius:12px;padding:14px;
+  font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;text-align:center;text-decoration:none;
+  transition:transform .16s var(--bounce)}
+.share-btn:hover{transform:translateY(-2px)}
+.sub-btn{position:relative;overflow:hidden;display:block;width:100%;background:var(--card);color:var(--accent);
+  border:1.5px solid var(--pink);border-radius:12px;padding:13px;font-size:14px;font-weight:700;
+  font-family:inherit;cursor:pointer;text-align:center}
+.sub-btn .sweep{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--pink-pale);
+  transition:width .26s var(--e-soft)}
+.sub-btn span:last-child{position:relative}
+@media (hover:hover){.sub-btn:hover .sweep{width:100%}}
+.sub-btn:focus-visible .sweep{width:100%}
+.ghost-btn{display:block;width:100%;background:transparent;color:var(--ink-soft);border:none;padding:10px;
+  font-size:13px;font-family:inherit;cursor:pointer;text-align:center}
+
+/* ===== 結果の登場演出：.revealing が付いている間だけ走る ===== */
+@keyframes pop{from{opacity:0;transform:scale(.72)}to{opacity:1;transform:scale(1)}}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes fadeArea{to{opacity:.16}}
+@keyframes grow{from{width:0}to{width:var(--v)}}
+@keyframes flicker{0%,100%{transform:scale(1) rotate(0)}
+  30%{transform:scale(1.12,.9) rotate(-4deg)}65%{transform:scale(.92,1.1) rotate(4deg)}}
+
+.revealing .res-badge{animation:pop .42s var(--bounce) .10s both}
+.revealing .res-type{animation:pop .5s var(--bounce) .34s both}
+.revealing .accent-ico{animation:pop .5s var(--bounce) .16s both}
+.revealing .accent-ico svg .fl{animation:flicker 1.5s ease-in-out .8s infinite}
+.revealing .res-desc{animation:rise .42s var(--e-firm) .62s both}
+.revealing .res-tips{animation:rise .42s var(--e-firm) .78s both}
+.revealing .radar .edge{animation:draw .95s var(--e-firm) .88s forwards}
+.revealing .radar .area{animation:fadeArea .5s ease 1.55s forwards}
+.revealing .radar .dot{animation:pop .34s var(--bounce) both;
+  animation-delay:calc(1.05s + var(--i,0) * .08s)}
+.revealing .trait-card{animation:rise .38s var(--e-firm) both;
+  animation-delay:calc(1.60s + var(--i,0) * .08s)}
+.revealing .trait-bar-fill{animation:grow .62s var(--e-firm) both;
+  animation-delay:calc(1.60s + var(--i,0) * .08s)}
+.revealing .btn-stack>*{animation:rise .4s var(--e-firm) both}
+.revealing .btn-stack>*:nth-child(1){animation-delay:2.24s}
+.revealing .btn-stack>*:nth-child(2){animation-delay:2.32s}
+.revealing .btn-stack>*:nth-child(3){animation-delay:2.40s}
+.revealing .btn-stack>*:nth-child(4){animation-delay:2.48s}
+
+.toast{display:none;position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:var(--night-deep);
+  color:#fff;font-size:13px;border-radius:999px;padding:10px 22px;z-index:50}
 .err{text-align:center;color:var(--ink-soft);padding:3rem 1rem;font-size:14px;line-height:1.8}
 footer{text-align:center;font-size:11px;color:var(--ink-faint);margin-top:2.5rem}
-@media (max-width:400px){ .start-title{font-size:21px} .res-type{font-size:21px} }
+@media (max-width:400px){.start-title{font-size:21px}.res-type{font-size:21px}}
+
+/* 動きに酔う人向け：最終状態を出して止める */
+@media (prefers-reduced-motion:reduce){
+  *{animation:none !important;transition:none !important}
+  .radar .edge{stroke-dashoffset:0}
+  .radar .area{opacity:.16}
+  .radar .dot{transform:none}
+  .trait-bar-fill{width:var(--v)}
+  .opt-btn.selected .opt-sweep{width:100%}
+  .opt-btn.selected .opt-check{transform:scale(1)}
+  .opt-btn.selected .opt-check svg{stroke-dashoffset:0}
+}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="topbar">
-    <a href="./">← 診断一覧にもどる</a>
-  </div>
+  <div class="topbar"><a href="./">← 診断一覧にもどる</a></div>
 
   <!-- スタート画面 -->
   <div class="screen card" id="screen-start">
@@ -79,18 +225,23 @@ footer{text-align:center;font-size:11px;color:var(--ink-faint);margin-top:2.5rem
     <h1 class="start-title" id="st-title"></h1>
     <p class="start-desc" id="st-desc"></p>
     <div class="start-meta"><span id="st-count"></span><span id="st-min"></span></div>
-    <button class="share-btn" style="background:var(--violet)" onclick="startQuiz()">診断をはじめる</button>
+    <button class="share-btn" style="background:var(--pink)" onclick="startQuiz()">診断をはじめる</button>
   </div>
 
   <!-- 質問画面 -->
   <div class="screen card" id="screen-quiz">
-    <div class="prog-bg"><div class="prog-fill" id="prog" style="width:0%"></div></div>
-    <div class="q-num" id="q-num"></div>
-    <div class="q-text" id="q-text"></div>
-    <div class="options" id="options"></div>
+    <div class="prog-row">
+      <div class="prog-bg"><div class="prog-fill" id="prog"></div></div>
+      <div class="remain">あと<span class="roll"><span class="roll-strip" id="roll"></span></span>問</div>
+    </div>
+    <div class="q-body" id="q-body">
+      <div class="q-num" id="q-num"></div>
+      <div class="q-text" id="q-text"></div>
+      <div class="options" id="options"></div>
+    </div>
     <div class="nav-row">
       <button class="nav-btn" id="btn-prev" onclick="prevQ()">もどる</button>
-      <button class="nav-btn primary" id="btn-next" onclick="nextQ()">次へ</button>
+      <button class="nav-btn primary" id="btn-next" onclick="nextQ()"><span class="lbl" id="next-lbl">次へ</span></button>
     </div>
   </div>
 
@@ -105,25 +256,26 @@ footer{text-align:center;font-size:11px;color:var(--ink-faint);margin-top:2.5rem
       <div class="res-tips-title" id="res-tips-title">配信者として / 推すなら</div>
       <div id="res-tips-body"></div>
     </div>
-    <div class="chart-wrap"><canvas id="radar" role="img" aria-label="診断結果のレーダーチャート"></canvas></div>
+    <div class="chart-wrap" id="chart-wrap"></div>
     <div class="traits-grid" id="traits-grid"></div>
     <div class="btn-stack">
       <a class="share-btn" id="btn-x" target="_blank" rel="noopener">𝕏 で結果をシェア</a>
-      <button class="sub-btn" onclick="saveImage()">結果を画像で保存</button>
-      <button class="sub-btn" onclick="copyShare()">結果テキストをコピー</button>
+      <button class="sub-btn" onclick="saveImage()"><span class="sweep"></span><span>結果を画像で保存</span></button>
+      <button class="sub-btn" onclick="copyShare()"><span class="sweep"></span><span>結果テキストをコピー</span></button>
       <button class="ghost-btn" onclick="restart()">もう一度診断する</button>
     </div>
   </div>
 
   <div class="screen err" id="screen-err">診断が見つかりませんでした。<br><a href="./">診断一覧にもどる</a></div>
-
   <div class="toast" id="toast">クリップボードにコピーしました！</div>
   <footer id="foot"></footer>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
-let QUIZ=null, answers=[], current=0, chart=null, lastResult=null;
+/* 回答したら自動で次の設問へ送る。false にすると「次へ」を押す運用に戻る */
+const AUTO_ADVANCE = true;
+
+let QUIZ=null, answers=[], current=0, lastResult=null;
 
 function show(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
@@ -147,48 +299,95 @@ async function init(){
   document.getElementById('st-count').textContent=`全${QUIZ.questions.length}問`;
   document.getElementById('st-min').textContent=`約${Math.max(1,Math.round(QUIZ.questions.length/6))}分`;
   document.getElementById('foot').textContent=`© ${new Date().getFullYear()} VTuber診断ポータル`;
+  /* 残り問題数のストリップ（N→0 を縦に並べる） */
+  document.getElementById('roll').innerHTML =
+    Array.from({length:QUIZ.questions.length+1},(_,i)=>`<span>${QUIZ.questions.length-i}</span>`).join('');
   show('screen-start');
 }
 
-function startQuiz(){current=0;show('screen-quiz');render();}
+function startQuiz(){current=0;show('screen-quiz');render('fwd');paintProgress();}
 
-function render(){
-  const q=QUIZ.questions[current];
+/* ===== 進捗（回答済み件数ベース） ===== */
+function answeredCount(){return answers.filter(a=>a!==null).length;}
+function paintProgress(){
+  const done=answeredCount(), prog=document.getElementById('prog');
+  const pct=done/QUIZ.questions.length*100;
+  const changed = prog.style.width !== pct+'%';
+  prog.style.width=pct+'%';
+  if(changed && done>0){                 // 伸びた瞬間だけ光沢を走らせる
+    prog.classList.remove('bump'); void prog.offsetWidth; prog.classList.add('bump');
+  }
+  document.getElementById('roll').style.transform=`translateY(${-done*15}px)`;
+}
+
+/* ===== 設問の描画 ===== */
+function render(dir){
+  const q=QUIZ.questions[current], body=document.getElementById('q-body');
   document.getElementById('q-num').textContent=`質問 ${current+1} / ${QUIZ.questions.length}`;
   document.getElementById('q-text').textContent=q.text;
-  document.getElementById('prog').style.width=`${(current/QUIZ.questions.length)*100}%`;
   const opts=document.getElementById('options');
-  opts.innerHTML='';
-  q.opts.forEach((o,i)=>{
-    const btn=document.createElement('button');
-    btn.className='opt-btn'+(answers[current]===i?' selected':'');
-    btn.textContent=o;
-    btn.onclick=()=>{answers[current]=i;render();};
-    opts.appendChild(btn);
+  opts.innerHTML=q.opts.map((o,i)=>
+    `<button class="opt-btn${answers[current]===i?' selected':''}" data-i="${i}">`+
+    `<span class="opt-sweep"></span><span class="opt-label"></span>`+
+    `<span class="opt-check"><svg viewBox="0 0 24 24"><path d="M5 12.5l5 5L19 7"/></svg></span></button>`).join('');
+  /* テキストは textContent で入れる（JSONの文字列をHTMLとして解釈させない） */
+  [...opts.children].forEach((b,i)=>{
+    b.querySelector('.opt-label').textContent=q.opts[i];
+    b.onclick=()=>choose(i,b);
   });
+  body.className='q-body '+(dir==='back'?'in-l':'in-r');
   document.getElementById('btn-prev').disabled=current===0;
-  document.getElementById('btn-next').disabled=answers[current]===null;
-  document.getElementById('btn-next').textContent=current===QUIZ.questions.length-1?'結果を見る':'次へ';
+  syncNext();
+}
+
+/* 選択：塗り→チェック描画を見せてから送る（再描画しないので演出が途切れない） */
+function choose(i,btn){
+  [...btn.parentElement.children].forEach(x=>x.classList.remove('selected'));
+  btn.classList.add('selected');
+  answers[current]=i;
+  paintProgress(); syncNext();
+  if(AUTO_ADVANCE && current<QUIZ.questions.length-1) setTimeout(()=>go(1),480);
+}
+
+function syncNext(){
+  const isLast=current===QUIZ.questions.length-1;
+  const allDone=answeredCount()===QUIZ.questions.length;
+  const btn=document.getElementById('btn-next'), lbl=document.getElementById('next-lbl');
+  const label=isLast?'結果を見る':'次へ';
+  if(lbl.textContent!==label){
+    lbl.classList.add('hide');
+    setTimeout(()=>{lbl.textContent=label;lbl.classList.remove('hide');},180);
+  }
+  btn.classList.toggle('final',isLast&&allDone);
+  btn.classList.toggle('ready',isLast&&allDone);
+  btn.disabled=answers[current]===null;
+}
+
+function go(step){
+  const nx=current+step;
+  if(nx<0||nx>=QUIZ.questions.length)return;
+  const body=document.getElementById('q-body');
+  body.className='q-body '+(step>0?'out-l':'out-r');
+  setTimeout(()=>{current=nx;render(step>0?'fwd':'back');},190);
 }
 
 function nextQ(){
   if(answers[current]===null)return;
   if(current===QUIZ.questions.length-1){showResult();return;}
-  current++;render();
+  go(1);
 }
-function prevQ(){if(current>0){current--;render();}}
+function prevQ(){if(current>0)go(-1);}
 
+/* ===== 採点（既存ロジックのまま） ===== */
 function calcScores(){
   const n=QUIZ.axes.length;
   const scores=new Array(n).fill(0),counts=new Array(n).fill(0);
-  const map=QUIZ.scoreMap;
-  const maxPer=Math.max(...map);
+  const map=QUIZ.scoreMap, maxPer=Math.max(...map);
   QUIZ.questions.forEach((q,i)=>{
     if(answers[i]!==null){scores[q.axis]+=map[answers[i]];counts[q.axis]++;}
   });
   return scores.map((s,i)=>counts[i]?Math.round((s/(counts[i]*maxPer))*100):0);
 }
-
 function getTypeId(scores){
   const sorted=scores.map((s,i)=>({s,i})).sort((a,b)=>b.s-a.s);
   const L=QUIZ.logic;
@@ -200,34 +399,87 @@ function getTypeId(scores){
   return L.default;
 }
 
+/* =======================================================================
+   レーダーチャートの座標計算。
+   SVG描画と画像保存(canvas)の両方がこの1つの関数を使う。
+   ここを1本にしておかないと、画面と保存画像がズレる。
+   ======================================================================= */
+function radarGeom(scores,cx,cy,R){
+  const n=scores.length;
+  const at=(i,v)=>{
+    const a=(-90+360/n*i)*Math.PI/180, r=R*v/100;
+    return [cx+r*Math.cos(a), cy+r*Math.sin(a)];
+  };
+  return {
+    n, at,
+    data: scores.map((v,i)=>at(i,v)),
+    rings:[25,50,75,100].map(g=>Array.from({length:n},(_,i)=>at(i,g))),
+    spokes:Array.from({length:n},(_,i)=>at(i,100)),
+    labels:Array.from({length:n},(_,i)=>at(i,100)),
+  };
+}
+const pstr=pts=>pts.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ');
+function perim(pts){
+  let L=0;
+  for(let i=0;i<pts.length;i++){
+    const a=pts[i],b=pts[(i+1)%pts.length];
+    L+=Math.hypot(b[0]-a[0],b[1]-a[1]);
+  }
+  return L;
+}
+
+/* SVGのレーダーを組み立てる（Chart.js は不要） */
+function renderChart(scores,axes){
+  const S=300, cx=150, cy=150, R=108;
+  const g=radarGeom(scores,cx,cy,R);
+  const len=Math.ceil(perim(g.data))+4;
+  const labels=g.labels.map(([x,y],i)=>{
+    const dx=x-cx, dy=y-cy, mid=Math.abs(dx)<8;
+    const anchor=mid?'middle':(dx>0?'start':'end');
+    const lx=cx+dx*1.12+(mid?0:(dx>0?6:-6));
+    const ly=cy+dy*1.12+(mid?(dy<0?-13:21):5);
+    return `<text class="lbl" x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="${anchor}">${esc(axes[i])}</text>`;
+  }).join('');
+  document.getElementById('chart-wrap').innerHTML=
+    `<svg class="radar" viewBox="-46 -14 ${S+92} ${S+44}" role="img" aria-label="診断結果のレーダーチャート">`+
+    g.rings.map(r=>`<polygon class="grid" points="${pstr(r)}"/>`).join('')+
+    g.spokes.map(([x,y])=>`<line class="spoke" x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}"/>`).join('')+
+    `<polygon class="area" points="${pstr(g.data)}"/>`+
+    `<polygon class="edge" points="${pstr(g.data)}" style="--len:${len};stroke-dasharray:${len}"/>`+
+    g.data.map(([x,y],i)=>`<circle class="dot" style="--i:${i}" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="4.5"/>`).join('')+
+    labels+`</svg>`;
+}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
 function showResult(){
   const scores=calcScores();
   const typeId=getTypeId(scores);
   const type=QUIZ.types[typeId];
   lastResult={scores,typeId,type};
   show('screen-result');
-  document.getElementById('res-badge').textContent=type.name;
+
+  const ico = QUIZ.accentIcon ? `<span class="accent-ico">${QUIZ.accentIcon}</span>` : '';
+  document.getElementById('res-badge').innerHTML = ico + esc(type.name);
   document.getElementById('res-type').textContent=type.label;
   document.getElementById('res-desc').textContent=type.desc;
+
   const tipLabels=QUIZ.tipLabels||['配信者として','推すなら'];
   document.getElementById('res-tips-title').textContent=QUIZ.tipsTitle||tipLabels.join(' / ');
   document.getElementById('res-tips-body').innerHTML=
-    `<div class="res-tip">${tipLabels[0]}：${type.streamer}</div>`+
-    `<div class="res-tip">${tipLabels[1]}：${type.fan}</div>`;
-  const grid=document.getElementById('traits-grid');
-  grid.innerHTML='';
-  QUIZ.axes.forEach((ax,i)=>{
-    grid.innerHTML+=`<div class="trait-card"><div class="trait-label">${ax}</div><div class="trait-val">${scores[i]}点</div><div class="trait-bar-bg"><div class="trait-bar-fill" style="width:${scores[i]}%"></div></div></div>`;
-  });
-  if(chart)chart.destroy();
-  chart=new Chart(document.getElementById('radar'),{
-    type:'radar',
-    data:{labels:QUIZ.axes,datasets:[{data:scores,backgroundColor:'rgba(127,119,221,0.18)',borderColor:'#7F77DD',pointBackgroundColor:'#7F77DD',pointRadius:4,borderWidth:2}]},
-    options:{responsive:true,maintainAspectRatio:false,animation:{duration:600},
-      plugins:{legend:{display:false}},
-      scales:{r:{min:0,max:100,ticks:{display:false,stepSize:25},grid:{color:'rgba(60,52,137,0.10)'},angleLines:{color:'rgba(60,52,137,0.10)'},pointLabels:{font:{size:12,family:"'M PLUS Rounded 1c',sans-serif"},color:'#6B6685'}}}}
-  });
-  // X共有リンク: OGP付き共有URL(/s/診断ID/タイプID)を使う
+    `<div class="res-tip"><b>${esc(tipLabels[0])}：</b>${esc(type.streamer)}</div>`+
+    `<div class="res-tip"><b>${esc(tipLabels[1])}：</b>${esc(type.fan)}</div>`;
+
+  document.getElementById('traits-grid').innerHTML=QUIZ.axes.map((ax,i)=>
+    `<div class="trait-card" style="--i:${i}"><div class="trait-label">${esc(ax)}</div>`+
+    `<div class="trait-val">${scores[i]}点</div><div class="trait-bar-bg">`+
+    `<div class="trait-bar-fill" style="--v:${scores[i]}%;--i:${i}"></div></div></div>`).join('');
+
+  renderChart(scores,QUIZ.axes);
+
+  /* 登場演出を頭出しして1回だけ再生する */
+  const card=document.getElementById('screen-result');
+  card.classList.remove('revealing'); void card.offsetWidth; card.classList.add('revealing');
+
   const shareUrl=`${location.origin}/s/${QUIZ.id}/${typeId}`;
   const tags=(QUIZ.hashtags||[]).map(t=>`#${t}`).join(' ');
   const text=`【${QUIZ.title}】\n私は「${type.label}」でした！\n\n${tags}`;
@@ -244,48 +496,68 @@ function shareText(){
   const tags=(QUIZ.hashtags||[]).map(t=>`#${t}`).join(' ');
   return `【${QUIZ.title}】\n私は「${type.label}」でした！\n\n${bars}\n\n${location.origin}/s/${QUIZ.id}/${lastResult.typeId}\n${tags}`;
 }
-
 function copyShare(){
   navigator.clipboard.writeText(shareText()).then(()=>{
     const t=document.getElementById('toast');
-    t.style.display='block';
-    setTimeout(()=>t.style.display='none',2500);
+    t.style.display='block'; setTimeout(()=>t.style.display='none',2500);
   });
 }
 
-function saveImage(){
+/* =======================================================================
+   画像保存：レーダーを canvas に直接描く。
+   以前は <canvas id="radar"> を drawImage で転写していたが、
+   SVG化で転写できなくなったのと、420px→560pxの拡大でぼやけていたため、
+   保存解像度でネイティブに描き直す。
+   ======================================================================= */
+function drawRadar(x,cx,cy,R,scores,axes){
+  const g=radarGeom(scores,cx,cy,R);
+  const poly=pts=>{x.beginPath();pts.forEach((p,i)=>i?x.lineTo(p[0],p[1]):x.moveTo(p[0],p[1]));x.closePath();};
+  x.lineWidth=2;x.strokeStyle='#F6CFE0';
+  g.rings.forEach(r=>{poly(r);x.stroke();});
+  g.spokes.forEach(([px,py])=>{x.beginPath();x.moveTo(cx,cy);x.lineTo(px,py);x.stroke();});
+  poly(g.data);
+  x.fillStyle='rgba(242,103,159,0.16)';x.fill();
+  x.lineWidth=5;x.strokeStyle='#F2679F';x.lineJoin='round';x.stroke();
+  g.data.forEach(([px,py])=>{x.beginPath();x.arc(px,py,9,0,Math.PI*2);x.fillStyle='#F2679F';x.fill();});
+  x.fillStyle='#8B8BA8';x.font=`700 25px 'M PLUS Rounded 1c',sans-serif`;
+  g.labels.forEach(([px,py],i)=>{
+    const dx=px-cx,dy=py-cy;
+    x.textAlign=Math.abs(dx)<12?'center':(dx>0?'left':'right');
+    x.fillText(axes[i],cx+dx*1.16,cy+dy*1.16+(Math.abs(dx)<12?(dy<0?-14:28):9));
+  });
+  x.textAlign='left';
+}
+
+async function saveImage(){
   const {scores,type}=lastResult;
+  /* Webフォントの読み込み完了を待つ（待たないと游ゴシック等にフォールバックする） */
+  if(document.fonts && document.fonts.ready){ try{ await document.fonts.ready; }catch(e){} }
   const W=1080,H=1350,c=document.createElement('canvas');
   c.width=W;c.height=H;
   const x=c.getContext('2d');
   const F="'M PLUS Rounded 1c',sans-serif";
-  x.fillStyle='#F5F2FF';x.fillRect(0,0,W,H);
-  x.fillStyle='#FFFFFF';
-  roundRect(x,50,50,W-100,H-100,36);x.fill();
+  x.fillStyle='#FFF7FA';x.fillRect(0,0,W,H);
+  x.fillStyle='#FFFFFF';roundRect(x,50,50,W-100,H-100,36);x.fill();
   x.textAlign='center';
-  x.fillStyle='#7F77DD';x.font=`700 34px ${F}`;
+  x.fillStyle='#F2679F';x.font=`700 34px ${F}`;
   x.fillText(QUIZ.title,W/2,150);
-  x.fillStyle='#3C3489';x.font=`900 58px ${F}`;
+  x.fillStyle='#32324E';x.font=`900 58px ${F}`;
   wrapText(x,type.label,W/2,235,W-220,70);
-  // レーダーチャートを転写
-  const rc=document.getElementById('radar');
-  const size=560;
-  x.drawImage(rc,(W-size)/2,330,size,size*(rc.height/rc.width));
-  // 軸スコア
+  drawRadar(x,W/2,600,205,scores,QUIZ.axes);
   x.textAlign='left';
-  let y=980;
+  let y=950;
   QUIZ.axes.forEach((ax,i)=>{
-    x.fillStyle='#6B6685';x.font=`700 26px ${F}`;
+    x.fillStyle='#8B8BA8';x.font=`700 26px ${F}`;
     x.fillText(ax,140,y);
-    x.fillStyle='#E4E0F5';roundRect(x,340,y-20,540,16,8);x.fill();
+    x.fillStyle='#F6CFE0';roundRect(x,340,y-20,540,16,8);x.fill();
     const g=x.createLinearGradient(340,0,880,0);
-    g.addColorStop(0,'#7F77DD');g.addColorStop(1,'#F4A0C6');
+    g.addColorStop(0,'#F2679F');g.addColorStop(1,'#5FB8EE');
     x.fillStyle=g;roundRect(x,340,y-20,540*scores[i]/100,16,8);x.fill();
-    x.fillStyle='#3C3489';x.font=`900 26px ${F}`;
+    x.fillStyle='#EE4D93';x.font=`900 26px ${F}`;
     x.fillText(`${scores[i]}`,905,y);
     y+=52;
   });
-  x.textAlign='center';x.fillStyle='#A19CBF';x.font=`500 24px ${F}`;
+  x.textAlign='center';x.fillStyle='#BCBCD2';x.font=`500 24px ${F}`;
   x.fillText(location.host,W/2,H-90);
   const a=document.createElement('a');
   a.download=`${QUIZ.id}-result.png`;
@@ -308,7 +580,9 @@ function wrapText(x,text,cx,y,maxW,lh){
 
 function restart(){
   answers=new Array(QUIZ.questions.length).fill(null);current=0;
-  show('screen-quiz');render();
+  document.getElementById('screen-result').classList.remove('revealing');
+  document.getElementById('prog').style.width='0%';
+  show('screen-quiz');render('fwd');paintProgress();
 }
 
 init();
