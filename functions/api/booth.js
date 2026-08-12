@@ -23,11 +23,17 @@ export async function onRequest(context) {
   if (!/^[\w-]+$/.test(shop)) return json({ error: "bad shop" }, 400);
 
   const target = `https://${shop}.booth.pm/`;
+  const headers = {
+    "x-return-format": "html", // 生HTMLで返す(data-itemを残すため)
+    accept: "text/html",
+  };
+  // Cloudflare Pages の環境変数 JINA_KEY があれば付ける。
+  // キー無しだと共有IPのレート制限(429)に当たりやすいので、本番運用ではキー推奨。
+  if (context.env && context.env.JINA_KEY) {
+    headers.authorization = `Bearer ${context.env.JINA_KEY}`;
+  }
   const res = await fetch(`https://r.jina.ai/${target}`, {
-    headers: {
-      "x-return-format": "html", // 生HTMLで返す(data-itemを残すため)
-      accept: "text/html",
-    },
+    headers,
     cf: { cacheTtl: 600, cacheEverything: true },
   });
   if (!res.ok) return json({ error: "upstream " + res.status }, 502);
