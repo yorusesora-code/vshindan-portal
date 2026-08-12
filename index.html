@@ -447,13 +447,20 @@ function hangHTML(items,wide,ph){
     `<span class="hang-price">${it.price||''}</span></span></a></div>`).join('');
   return set+set+set; /* 3セット複製でシームレスな無限ループ */
 }
-/* BOOTH: data/goods.json から取得(空/失敗時は棚ごと非表示) */
+/* BOOTH: /api/booth で自動取得。失敗/空なら data/goods.json(手動バックアップ)にフォールバック。
+   どちらも取れなければ棚ごと非表示。 */
 (async function loadBooth(){
   let items=[];
   try{
-    const r=await fetch('data/goods.json');
+    const r=await fetch('/api/booth?shop=v-palette');
     if(r.ok) items=(await r.json()).items||[];
   }catch(e){}
+  if(!items.length){
+    try{
+      const r=await fetch('data/goods.json');
+      if(r.ok) items=(await r.json()).items||[];
+    }catch(e){}
+  }
   if(!items.length){ document.getElementById('shop').style.display='none'; return; }
   document.getElementById('booth-track').innerHTML=hangHTML(items,false,'🛒');
   setupFlow('booth-band');
