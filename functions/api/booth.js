@@ -1,9 +1,13 @@
 // /api/booth?shop={ショップのサブドメイン}
-// BOOTHショップの公開ページをサーバー側で取得し、商品一覧JSONに変換する。
+// BOOTHショップの公開ページを取得し、商品一覧JSONに変換する。
 // BOOTHは各商品を <li ... data-item="{HTMLエンティティ化されたJSON}"> に埋め込んでいるので、
 // それをデコードして {url, img, name, price} に整形する。
 // 商品を出品・削除・並べ替えすると、約10分以内にHPへ自動反映される(10分キャッシュ)。
-// ブラウザから直接BOOTHは読めない(CORS)ため、このFunctionが橋渡しする。
+//
+// 【なぜJina Reader経由か】
+// BOOTH(pixiv)はCloudflareのサーバーIPからの直接アクセスを403で拒否する。
+// そこで公開リーダー r.jina.ai を挟んで取得する。X-Return-Format: html で生HTMLを返させ、
+// 上のdata-itemをそのまま抽出する。Jinaが落ちた場合はindex.html側がgoods.jsonにフォールバックする。
 export async function onRequest(context) {
   const url = new URL(context.request.url);
   const shop = url.searchParams.get("shop") || "v-palette";
@@ -18,24 +22,11 @@ export async function onRequest(context) {
     });
   if (!/^[\w-]+$/.test(shop)) return json({ error: "bad shop" }, 400);
 
-  const res = await fetch(`https://${shop}.booth.pm/`, {
+  const target = `https://${shop}.booth.pm/`;
+  const res = await fetch(`https://r.jina.ai/${target}`, {
     headers: {
-      "user-agent":
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 " +
-        "(KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
-      accept:
-        "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
-      "accept-language": "ja,en-US;q=0.9,en;q=0.8",
-      referer: "https://booth.pm/",
-      "sec-ch-ua": '"Chromium";v="125", "Not.A/Brand";v="24"',
-      "sec-ch-ua-mobile": "?0",
-      "sec-ch-ua-platform": '"Windows"',
-      "sec-fetch-dest": "document",
-      "sec-fetch-mode": "navigate",
-      "sec-fetch-site": "none",
-      "sec-fetch-user": "?1",
-      "upgrade-insecure-requests": "1",
-      cookie: "adult=t",
+      "x-return-format": "html", // 生HTMLで返す(data-itemを残すため)
+      accept: "text/html",
     },
     cf: { cacheTtl: 600, cacheEverything: true },
   });

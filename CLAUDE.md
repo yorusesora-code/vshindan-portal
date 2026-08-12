@@ -62,6 +62,8 @@ VTuber・配信者・活動者向けの診断ポータルサイト。
 
 `functions/api/booth.js` が `https://{shop}.booth.pm/` の公開ページを取得し、各商品カードに
 埋め込まれた `data-item` のJSON(id/name/price/画像/在庫状態)を抽出して一覧化する。
+**BOOTH(pixiv)はCloudflareのサーバーIPを403で弾く**ため、公開リーダー `r.jina.ai` を経由して
+生HTMLを取得している(`X-Return-Format: html`)。Jinaが落ちたら index.html が goods.json に自動フォールバック。
 **BOOTHで商品を出品・削除・並べ替えると、約10分以内にHPのSHOP棚へ自動反映される**(10分キャッシュ)。
 価格は `¥ 180~`→`¥180〜` に整形し、商品名に「無料」が含まれれば「無料版あり」バッジを自動付与。
 売切れ・販売終了の商品は自動的に非表示。**HP側の更新作業は不要。**
