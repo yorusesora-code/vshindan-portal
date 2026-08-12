@@ -21,6 +21,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # rebase できるよう全履歴を取得
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
@@ -30,13 +32,18 @@ jobs:
         run: node scripts/fetch-booth.mjs
       - name: Commit if changed
         run: |
-          if [[ -n "$(git status --porcelain data/goods.json)" ]]; then
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add data/goods.json
-            git commit -m "chore: auto-update BOOTH goods.json"
-            git push
-            echo "committed and pushed."
-          else
-            echo "No changes."
+          if [[ -z "$(git status --porcelain data/goods.json)" ]]; then
+            echo "No changes."; exit 0
           fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/goods.json
+          git commit -m "chore: auto-update BOOTH goods.json"
+          # 実行中に他のpushが入っても落ちないよう rebase して数回リトライ
+          for i in 1 2 3; do
+            if git pull --rebase --autostash origin main && git push origin HEAD:main; then
+              echo "committed and pushed."; exit 0
+            fi
+            echo "push retry $i…"; sleep 5
+          done
+          echo "failed to push after retries"; exit 1
