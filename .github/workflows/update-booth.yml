@@ -1,0 +1,42 @@
+name: Update BOOTH goods
+
+on:
+  schedule:
+    - cron: "0 */6 * * *" # 6時間おき(UTC基準)
+  workflow_dispatch: {} # 手動実行(Actionsタブの「Run workflow」)
+  push:
+    paths: # スクリプト/ワークフロー更新時に初回実行してすぐ確認できるように
+      - ".github/workflows/update-booth.yml"
+      - "scripts/fetch-booth.mjs"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-booth
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Fetch BOOTH products → data/goods.json
+        env:
+          BOOTH_SHOP: v-palette
+        run: node scripts/fetch-booth.mjs
+      - name: Commit if changed
+        run: |
+          if [[ -n "$(git status --porcelain data/goods.json)" ]]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add data/goods.json
+            git commit -m "chore: auto-update BOOTH goods.json"
+            git push
+            echo "committed and pushed."
+          else
+            echo "No changes."
+          fi
